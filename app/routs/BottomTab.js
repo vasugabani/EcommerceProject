@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Product from '../container/Home/Product';
@@ -7,9 +7,12 @@ import MyBag from '../container/Cart/MyBag';
 import Favourite from '../container/Favourite/Favourite';
 import MyProfile from '../container/Profile/MyProfile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import StackNavigation, { BagStack, FavouriteStack, HomeStack, ProfileStack, ShopStack } from './StackNavigation';
 
 const Tab = createBottomTabNavigator();
 export default function BottomTab() {
+
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -38,15 +41,24 @@ export default function BottomTab() {
         tabBarInactiveTintColor: 'grey',
       })}
     >
-      <Tab.Screen name='Home' component={Product}
+      <Tab.Screen name='Home' component={HomeStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen name='Shop' component={ShopStack} />
+      <Tab.Screen name='Bag' component={BagStack} options={{headerShown:false,}}/>
+      <Tab.Screen name='Favourite' component={FavouriteStack} options={{headerShown:false,}}/>
+      <Tab.Screen name='Profile' component={ProfileStack}  options={{headerShown:false}} />
+    </Tab.Navigator>
+  )
+}
+{/* <Tab.Screen name='Home' component={StackNavigation}
         options={{
           headerShown: false,
         }}
       />
       <Tab.Screen name='Shop' component={ProductList} />
-      <Tab.Screen name='Bag' component={MyBag} />
-      <Tab.Screen name='Favourite' component={Favourite} />
-      <Tab.Screen name='Profile' component={MyProfile} />
-    </Tab.Navigator>
-  )
-}
+      <Tab.Screen name='Bag' component={MyBag} options={{headerShown:false,}}/>
+      <Tab.Screen name='Favourite' component={Favourite} options={{headerShown:false,}}/>
+      <Tab.Screen name='Profile' component={MyProfile}  options={{headerShown:false}} /> */}
