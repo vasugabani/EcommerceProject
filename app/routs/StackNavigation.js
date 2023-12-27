@@ -27,9 +27,8 @@ import MyOrder from '../container/Profile/MyOrder';
     )
   }
 
-  const HomeStack = ({ navigation }) => {
+  export default function StackNavigation ({navigation}) {
     return (
-
       <Stack.Navigator>
         <Stack.Screen name='Product' component={Product}
           options={{ headerShown: false }}
@@ -38,7 +37,7 @@ import MyOrder from '../container/Profile/MyOrder';
           options={{
             headerTitleAlign: 'center',
             headerBackVisible: false,
-
+  
             headerLeft: () => (
               <CustomButton
                 icon='chevron-left'
@@ -103,113 +102,7 @@ import MyOrder from '../container/Profile/MyOrder';
         />
         <Stack.Screen name='Bag' component={MyBag}
           options={{
-
-            headerBackVisible: false,
-            // headerShown:false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Address' component={Address}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Payment' component={Payment}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Success' component={Success}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-          }}
-        />
-      </Stack.Navigator>
-    )
-  }
-
-  const ShopStack = ({ navigation }) => {
-    return (
-
-      <Stack.Navigator>
-        <Stack.Screen name='ProductList' component={ProductList}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-            headerRight: () => (
-              <CustomButton
-                icon='shopping-search'
-              />
-            )
-          }}
-        />
-        <Stack.Screen name='Filter' component={Filter}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='ProductDetails' component={ProductDetails}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-            headerShown:false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Bag' component={MyBag}
-          options={{
-
+  
             headerBackVisible: false,
             headerLeft: () => (
               <CustomButton
@@ -255,97 +148,7 @@ import MyOrder from '../container/Profile/MyOrder';
             headerBackVisible: false,
           }}
         />
-      </Stack.Navigator>
-    )
-  }
-
-  const BagStack = ({ navigation }) => {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen name='Bag' component={MyBag}
-          options={{
-            headerShown:false,
-            headerBackVisible: false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Address' component={Address}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Payment' component={Payment}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Success' component={Success}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-          }}
-        />
-      </Stack.Navigator>
-    )
-  }
-
-  const FavouriteStack = ({ navigation }) => {
-    return (
-      <Stack.Navigator>
         <Stack.Screen name='Favourite' component={Favourite}
-        options={{
-          headerTitleAlign: 'center',
-          headerBackVisible: false,
-          headerLeft: () => (
-            <CustomButton
-              icon='chevron-left'
-              onClick={() => {
-                navigation.goBack();
-              }}
-            />
-          ),
-        }}
-      />
-      <Stack.Screen name='Bag' component={MyBag}
-          options={{
-            
-            headerBackVisible: false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Address' component={Address}
           options={{
             headerTitleAlign: 'center',
             headerBackVisible: false,
@@ -359,35 +162,7 @@ import MyOrder from '../container/Profile/MyOrder';
             ),
           }}
         />
-        <Stack.Screen name='Payment' component={Payment}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-            headerLeft: () => (
-              <CustomButton
-                icon='chevron-left'
-                onClick={() => {
-                  navigation.goBack();
-                }}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen name='Success' component={Success}
-          options={{
-            headerTitleAlign: 'center',
-            headerBackVisible: false,
-          }}
-        />
-      </Stack.Navigator>
-    )
-  }
-
-  const ProfileStack = ({ navigation }) => {
-    return (
-      <Stack.Navigator>
         <Stack.Screen name='Profile' component={MyProfile} />
-
         <Stack.Screen name='MyOrder' component={MyOrder}
           options={{
             headerTitleAlign: 'center',
@@ -402,167 +177,396 @@ import MyOrder from '../container/Profile/MyOrder';
             ),
           }}
         />
-
       </Stack.Navigator>
-
     )
   }
-
-  export {HomeStack, ShopStack, BagStack, FavouriteStack, ProfileStack }
-
-
-
-
+  
   //===============================================================
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name='Product' component={Product}
-//         options={{ headerShown: false }}
-//       />
-//       <Stack.Screen name='ProductList' component={ProductList}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
+  // const HomeStack = ({ navigation }) => {
+  //   return (
 
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//           headerRight: () => (
-//             <CustomButton
-//               icon='shopping-search'
-//             />
-//           )
-//         }}
-//       />
-//       <Stack.Screen name="Categories" component={Categories}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//           headerRight: () => (
-//             <CustomButton
-//               icon='shopping-search'
-//             />
-//           )
-//         }}
-//       />
-//       <Stack.Screen name='Filter' component={Filter}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//         }}
-//       />
-//       <Stack.Screen name='ProductDetails' component={ProductDetails}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//         }}
-//       />
-//       <Stack.Screen name='Bag' component={MyBag}
-//         options={{
+  //     <Stack.Navigator>
+  //       <Stack.Screen name='Product' component={Product}
+  //         options={{ headerShown: false }}
+  //       />
+  //       <Stack.Screen name='ProductList' component={ProductList}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
 
-//           headerBackVisible: false,
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//         }}
-//       />
-//       <Stack.Screen name='Address' component={Address}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//         }}
-//       />
-//       <Stack.Screen name='Payment' component={Payment}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//         }}
-//       />
-//       <Stack.Screen name='Success' component={Success}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
-//         }}
-//       />
-//       <Stack.Screen name='Favourite' component={Favourite}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//         }}
-//       />
-//       <Stack.Screen name='Profile' component={MyProfile} />
-//       <Stack.Screen name='MyOrder' component={MyOrder}
-//         options={{
-//           headerTitleAlign: 'center',
-//           headerBackVisible: false,
-//           headerLeft: () => (
-//             <CustomButton
-//               icon='chevron-left'
-//               onClick={() => {
-//                 navigation.goBack();
-//               }}
-//             />
-//           ),
-//         }}
-//       />
-//     </Stack.Navigator>
-//   )
-// }
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //           headerRight: () => (
+  //             <CustomButton
+  //               icon='shopping-search'
+  //             />
+  //           )
+  //         }}
+  //       />
+  //       <Stack.Screen name="Categories" component={Categories}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //           headerRight: () => (
+  //             <CustomButton
+  //               icon='shopping-search'
+  //             />
+  //           )
+  //         }}
+  //       />
+  //       <Stack.Screen name='Filter' component={Filter}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='ProductDetails' component={ProductDetails}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Bag' component={MyBag}
+  //         options={{
+
+  //           headerBackVisible: false,
+  //           // headerShown:false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Address' component={Address}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Payment' component={Payment}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Success' component={Success}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //         }}
+  //       />
+  //     </Stack.Navigator>
+  //   )
+  // }
+
+  // const ShopStack = ({ navigation }) => {
+  //   return (
+
+  //     <Stack.Navigator>
+  //       <Stack.Screen name='ProductList' component={ProductList}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //           headerRight: () => (
+  //             <CustomButton
+  //               icon='shopping-search'
+  //             />
+  //           )
+  //         }}
+  //       />
+  //       <Stack.Screen name='Filter' component={Filter}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='ProductDetails' component={ProductDetails}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerShown:false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Bag' component={MyBag}
+  //         options={{
+
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Address' component={Address}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Payment' component={Payment}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Success' component={Success}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //         }}
+  //       />
+  //     </Stack.Navigator>
+  //   )
+  // }
+
+  // const BagStack = ({ navigation }) => {
+  //   return (
+  //     <Stack.Navigator>
+  //       <Stack.Screen name='Bag' component={MyBag}
+  //         options={{
+  //           headerShown:false,
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Address' component={Address}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Payment' component={Payment}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Success' component={Success}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //         }}
+  //       />
+  //     </Stack.Navigator>
+  //   )
+  // }
+
+  // const FavouriteStack = ({ navigation }) => {
+  //   return (
+  //     <Stack.Navigator>
+  //       <Stack.Screen name='Favourite' component={Favourite}
+  //       options={{
+  //         headerTitleAlign: 'center',
+  //         headerBackVisible: false,
+  //         headerLeft: () => (
+  //           <CustomButton
+  //             icon='chevron-left'
+  //             onClick={() => {
+  //               navigation.goBack();
+  //             }}
+  //           />
+  //         ),
+  //       }}
+  //     />
+  //     <Stack.Screen name='Bag' component={MyBag}
+  //         options={{
+            
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Address' component={Address}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Payment' component={Payment}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+  //       <Stack.Screen name='Success' component={Success}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //         }}
+  //       />
+  //     </Stack.Navigator>
+  //   )
+  // }
+
+  // const ProfileStack = ({ navigation }) => {
+  //   return (
+  //     <Stack.Navigator>
+  //       <Stack.Screen name='Profile' component={MyProfile} />
+
+  //       <Stack.Screen name='MyOrder' component={MyOrder}
+  //         options={{
+  //           headerTitleAlign: 'center',
+  //           headerBackVisible: false,
+  //           headerLeft: () => (
+  //             <CustomButton
+  //               icon='chevron-left'
+  //               onClick={() => {
+  //                 navigation.goBack();
+  //               }}
+  //             />
+  //           ),
+  //         }}
+  //       />
+
+  //     </Stack.Navigator>
+
+  //   )
+  // }
+
+  // export {HomeStack, ShopStack, BagStack, FavouriteStack, ProfileStack }
+
+
+
+
+
+  

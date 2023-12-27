@@ -41,18 +41,19 @@ export default function BottomTab() {
         tabBarInactiveTintColor: 'grey',
       })}
     >
-      <Tab.Screen name='Home' component={HomeStack}
+      <Tab.Screen name='Home' component={StackNavigation}
         options={{
           headerShown: false,
         }}
       />
-      <Tab.Screen name='Shop' component={ShopStack} />
-      <Tab.Screen name='Bag' component={BagStack} options={{headerShown:false,}}/>
-      <Tab.Screen name='Favourite' component={FavouriteStack} options={{headerShown:false,}}/>
-      <Tab.Screen name='Profile' component={ProfileStack}  options={{headerShown:false}} />
+      <Tab.Screen name='Shop' component={ProductList} />
+      <Tab.Screen name='Bag' component={MyBag} options={{headerShown:false,}}/>
+      <Tab.Screen name='Favourite' component={Favourite} options={{headerShown:false,}}/>
+      <Tab.Screen name='Profile' component={MyProfile}  options={{headerShown:false}} />
     </Tab.Navigator>
   )
 }
+
 {/* <Tab.Screen name='Home' component={StackNavigation}
         options={{
           headerShown: false,

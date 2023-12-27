@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, Image, Modal } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ShoppingButton from '../../component/Button/ShoppingButton'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProductCard from '../../component/Product/ProductCard';
@@ -8,6 +8,7 @@ import { horizontalScale, moderateScale, verticalScale } from '../../constant/Me
 
 export default function ProductList({ navigation }) {
 
+  const [data, setData] = useState([])
   const [modal, setmodel] = useState(false)
 
   const handlepress = () => {
@@ -17,6 +18,17 @@ export default function ProductList({ navigation }) {
     setmodel(false)
   }
 
+  useEffect(() => {
+    GetData();
+  }, [])
+
+  const GetData = async () => {
+    const responce = await fetch('https://api.escuelajs.co/api/v1/products')
+    const pData = await responce.json();
+    console.log(pData);
+
+    setData(pData)
+  }
   return (
     <View>
       <ScrollView>
@@ -67,35 +79,47 @@ export default function ProductList({ navigation }) {
           visible={modal}
         >
           <View style={{ width: '100%', marginTop: verticalScale(410), backgroundColor: 'white', }}>
-            <TouchableOpacity onPress={handlecross} style={{marginLeft:horizontalScale(150)}}>
+            <TouchableOpacity onPress={handlecross} style={{ marginLeft: horizontalScale(150) }}>
               <MaterialCommunityIcons name='minus-thick' size={50} color={'black'} />
             </TouchableOpacity>
 
             <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18),fontWeight:'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Popular</Text>
+              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Popular</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18),fontWeight:'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Newest</Text>
+              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Newest</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18),fontWeight:'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Custom Review</Text>
+              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Custom Review</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18),fontWeight:'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Price:low to high</Text>
+              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Price:low to high</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18),fontWeight:'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Price:high to low</Text>
+              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Price:high to low</Text>
             </TouchableOpacity>
           </View>
         </Modal>
 
         <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginTop: 6, flex: 1, flexWrap: 'wrap', }}>
+
+          {
+            data.map((v, i) => (
+              <ProductCard
+                image={v.images[0]}
+                subTitle={v.description}
+                title={v.title}
+                price={v.price}
+                onPress={() => navigation.navigate('ProductDetails')}
+              />
+            ))
+          }
           <ProductCard
             image={require('../../../assets/image/Image.png')}
             subTitle='Mango'
             title='T-Shirt SPANISH'
             price='9$'
-            onPress={()=>navigation.navigate('ProductDetails')}
+            onPress={() => navigation.navigate('ProductDetails')}
           />
           <ProductCard
             image={require('../../../assets/image/photo2.png')}
