@@ -1,14 +1,15 @@
 import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-export default function Card({imguri, title, mainTitle, Dollar, discount, disColor }) {
+export default function Card({imgref, title, mainTitle, Dollar, discount, disColor }) {
+    console.log(imgref,'lllllllllllllllllllllll');
     return (
       
             <View style={style.parentBox}>
                 <View style={style.box}>
                     <Image
                         style={style.image1}
-                        source={imguri}
+                        source={{uri:imgref}}
                     />
                     <Pressable style={{ margin: 6, padding: 1, backgroundColor: disColor, width: 25, position: 'absolute', borderRadius: 10 }}>
                         <Text style={{ fontSize: 9, color: 'white', textAlign: 'center' }}>{discount}</Text>

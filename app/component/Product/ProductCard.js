@@ -18,7 +18,6 @@ export default function ProductCard({ image, subTitle, title, price, discount, c
                     
                 </Pressable>
                 <View style={{width:170,height:'auto',marginTop:8}}>
-                <Text style={{ marginTop: 5 }}>{subTitle}</Text>
                 <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 2 }}>{title}</Text>
                 <Text style={{ fontWeight: 'bold', marginTop: 2, }}>{price}</Text></View>
             </TouchableOpacity>

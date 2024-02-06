@@ -1,15 +1,33 @@
-import { View, Text, ScrollView, TouchableOpacity, Image, Modal } from 'react-native'
+
+import { View, Text, ScrollView, TouchableOpacity, Image, Modal, StyleSheet, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ShoppingButton from '../../component/Button/ShoppingButton'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProductCard from '../../component/Product/ProductCard';
 import { horizontalScale, moderateScale, verticalScale } from '../../constant/Metrices';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductData } from '../../redux/slice/product.slice';
+import { useRoute } from '@react-navigation/native';
+import { getSubCatData } from '../../redux/slice/subCategory.slice';
+import { getCategoryData } from '../../redux/slice/category.slice';
 
 export default function ProductList({ navigation }) {
-
+  const [sort, setSort] = useState('');
   const [data, setData] = useState([])
   const [modal, setmodel] = useState(false)
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('')
+  console.log(category,"111111111111111111111111111111111111111111");
+  // console.log(search);
+  // let arr = [];
+
+  const route = useRoute()
+  const id = route.params?.id
+  // console.log(id);
+
+  const category_id = route.params?.category_id
+  // console.log(category_id);
+  
 
   const handlepress = () => {
     setmodel(true)
@@ -17,44 +35,91 @@ export default function ProductList({ navigation }) {
   const handlecross = () => {
     setmodel(false)
   }
-
+  const dispatch = useDispatch()
   useEffect(() => {
-    GetData();
+    // GetData();
+    dispatch(getProductData())
+    dispatch(getSubCatData())
+    dispatch(getCategoryData())
   }, [])
 
-  const GetData = async () => {
-    const responce = await fetch('https://api.escuelajs.co/api/v1/products')
-    const pData = await responce.json();
-    console.log(pData);
+  const categoryData = useSelector(state => state.category)
 
-    setData(pData)
+  const subCatData = useSelector(state => state.subCategory)
+
+  const productSel = useSelector(state => state.product)
+
+  const searchSortData = () => {
+    let fData;
+
+    console.log(category,"cccccccccccccccccccccccccccccc");
+
+    if(category){
+      fData = productSel.product.filter((v)=>v.subCategory == category)
+    }else if(category == ''){
+      fData = fData
+    }else {
+      fData = productSel.product.filter((v) => v.subCategory == id)
+    }
+
+    console.log(fData,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    
+
+    fData = fData.filter((v) =>
+      v.title.toLowerCase().includes(search.toLowerCase()) ||
+      v.description.toLowerCase().includes(search.toLowerCase()) ||
+      v.price.toString().includes(search.toLowerCase())
+    );
+
+    fData = fData.sort((a, b) => {
+      if (sort === 'lh') {
+        return a.price - b.price
+      } else if (sort === 'hl') {
+        return b.price - a.price
+      } else if (sort === 'az') {
+        return a.title.localeCompare(b.title)
+      } else if (sort === 'za') {
+        return b.title.localeCompare(a.title)
+      }
+    });
+
+    return fData;
   }
+
+  const finalData = searchSortData();
+
+
+  // const a = subCatData.subCatData.filter((v) => v.category === id);
+  // console.log("aaaaaaaaaaaa", a, id, subCatData.subCatData);
+
   return (
     <View>
       <ScrollView>
 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={{ flexDirection: 'row', }}>
+
+            
             <ShoppingButton
-              title='T-Shirts'
-              onPress={() => console.log("t shirts")}
+              // key={i}
+              title='All'
+              onPress={() => setCategory('')}
             />
-            <ShoppingButton
-              title='Crop tops'
-              onPress={() => console.log("Crop tops")}
-            />
-            <ShoppingButton
-              title='Blouses'
-              onPress={() => console.log("Blouses")}
-            />
-            <ShoppingButton
-              title='Skirts'
-              onPress={() => console.log("Skirts")}
-            />
-            <ShoppingButton
-              title='Dresses'
-              onPress={() => console.log("Dresses")}
-            />
+
+
+            {
+              subCatData.subCatData.filter((v) => v.category === category_id).map((val, i) => {
+                return (
+                  <ShoppingButton
+                    key={i}
+                    title={val.subCatName}
+                    onPress={() => setCategory(val.id)}
+                  />
+                )
+
+              })
+            }
+
           </View>
         </ScrollView>
 
@@ -73,6 +138,12 @@ export default function ProductList({ navigation }) {
           </TouchableOpacity>
         </View>
 
+        <TextInput
+          style={style.searchInput}
+          placeholder='Search...'
+          onChangeText={setSearch}
+        />
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -83,20 +154,20 @@ export default function ProductList({ navigation }) {
               <MaterialCommunityIcons name='minus-thick' size={50} color={'black'} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Popular</Text>
+            <TouchableOpacity onPress={() => { setSort('popular'), setmodel(false) }} style={style.sortPress}>
+              <Text style={style.sortText}>Popular</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Newest</Text>
+            <TouchableOpacity onPress={() => { setSort('az'), setmodel(false) }} style={style.sortPress}>
+              <Text style={style.sortText}>A to Z</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Custom Review</Text>
+            <TouchableOpacity onPress={() => { setSort('za'), setmodel(false) }} style={style.sortPress}>
+              <Text style={style.sortText}>Z to A</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Price:low to high</Text>
+            <TouchableOpacity onPress={() => { setSort('lh'), setmodel(false) }} style={style.sortPress}>
+              <Text style={style.sortText}>Price:low to high</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: '100%', height: verticalScale(55) }}>
-              <Text style={{ fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Price:high to low</Text>
+            <TouchableOpacity onPress={() => { setSort('hl'), setmodel(false) }} style={style.sortPress}>
+              <Text style={style.sortText}>Price:high to low</Text>
             </TouchableOpacity>
           </View>
         </Modal>
@@ -104,48 +175,49 @@ export default function ProductList({ navigation }) {
         <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginTop: 6, flex: 1, flexWrap: 'wrap', }}>
 
           {
-            data.map((v, i) => (
+            finalData.map((v) => {
+              // console.log("vvvvvvvvvvvvvvvvvvvvv", v);
+              return (
+                <ProductCard
+                  key={v.id}
+                  image={v.image}
+                  subTitle={v.description}
+                  title={v.title}
+                  price={v.price}
+                  onPress={() => navigation.navigate('ProductDetails', { id: v.id })}
+                />
+              )
+
+            })
+          }
+
+          {/* {
+            finalData.map((v, i) => (
               <ProductCard
+                key={v.id}
                 image={v.images[0]}
                 subTitle={v.description}
                 title={v.title}
                 price={v.price}
-                onPress={() => navigation.navigate('ProductDetails')}
+                onPress={() => navigation.navigate('ProductDetails',{id:v.id})}
               />
             ))
-          }
-          <ProductCard
-            image={require('../../../assets/image/Image.png')}
-            subTitle='Mango'
-            title='T-Shirt SPANISH'
-            price='9$'
-            onPress={() => navigation.navigate('ProductDetails')}
-          />
-          <ProductCard
-            image={require('../../../assets/image/photo2.png')}
-            subTitle='Dorothy perkins'
-            title='Blouse'
-            price='9$'
-            color='red'
-            discount='20%'
-          />
-          <ProductCard
-            image={require('../../../assets/image/Image.png')}
-            subTitle='Mango'
-            title='Shirt'
-            price='9$'
-          />
-          <ProductCard
-            image={require('../../../assets/image/photo2.png')}
-            subTitle='Dorothy perkins'
-            title='Light Blouse'
-            price='9$'
-            color='red'
-            discount='30%'
-          />
+          } */}
+
         </View>
 
       </ScrollView>
     </View>
   )
 }
+const style = StyleSheet.create({
+  sortPress: {
+    width: '100%', height: verticalScale(55)
+  },
+  sortText: {
+    fontSize: moderateScale(18), fontWeight: 'bold', marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black'
+  },
+  searchInput: {
+    marginHorizontal: horizontalScale(16), marginTop: verticalScale(10)
+  }
+})

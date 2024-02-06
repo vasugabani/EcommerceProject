@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
 import { horizontalScale, verticalScale } from '../../constant/Metrices'
 import ColorCard from '../../component/ColorDesign/ColorCard'
 import SizeCard from '../../component/SizeCard/SizeCard'
@@ -8,12 +8,15 @@ import CheckBox from 'react-native-check-box'
 // import {  } from 'react-native-gesture-handler'
 
 export default function Filter() {
+  
   return (
     <ScrollView>
       <View style={{ marginHorizontal: horizontalScale(16), flex: 1, backgroundColor: 'white' }}>
-        <Text style={{ paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, paddingBottom: verticalScale(8), backgroundColor: '#f1f1f1' }}>Price range</Text>
+        
 
-        <Text style={{ paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, paddingBottom: verticalScale(8), backgroundColor: '#f1f1f1' }}>Colors</Text>
+        <Text style={style.subTitle}>Price range</Text>
+
+        <Text style={style.subTitle}>Colors</Text>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
           <ColorCard
@@ -42,7 +45,7 @@ export default function Filter() {
           />
         </View>
 
-        <Text style={{ marginTop: verticalScale(8), paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, marginBottom: verticalScale(8), backgroundColor: '#f1f1f1', paddingBottom: verticalScale(8) }}>Sizes</Text>
+        <Text style={style.sizeTitle}>Sizes</Text>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
           <SizeCard
@@ -67,7 +70,7 @@ export default function Filter() {
           />
         </View>
 
-        <Text style={{ marginTop: verticalScale(8), paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, marginBottom: verticalScale(8), backgroundColor: '#f1f1f1', paddingBottom: verticalScale(8) }}>Brands</Text>
+        <Text style={style.sizeTitle}>Brands</Text>
 
         {/* <View>
           <BrandCard
@@ -162,14 +165,14 @@ export default function Filter() {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: "#f1f1f1", marginTop: verticalScale(10), paddingTop: verticalScale(10), paddingBottom: verticalScale(20) }}>
           <TouchableOpacity onPress={() => console.log("discard")}
-            style={{ paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, paddingBottom: verticalScale(8), backgroundColor: 'black', borderWidth: 1, width: 120, borderRadius: 15 }}
-          >
+            style={style.btn}>
+              
             <Text style={{ color: 'white', alignSelf: 'center' }}>Discard</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => console.log("discard")}
-            style={{ paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, paddingBottom: verticalScale(8), backgroundColor: 'black', borderWidth: 1, width: 120, borderRadius: 15 }}
-          >
+            style={style.btn}>
+
             <Text style={{ color: 'white', alignSelf: 'center' }}>Apply</Text>
           </TouchableOpacity>
         </View>
@@ -178,3 +181,14 @@ export default function Filter() {
 
   )
 }
+const style=StyleSheet.create({
+  subTitle : {
+    paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, paddingBottom: verticalScale(8), backgroundColor: '#f1f1f1'
+  },
+  sizeTitle : {
+    marginTop: verticalScale(8), paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, marginBottom: verticalScale(8), backgroundColor: '#f1f1f1', paddingBottom: verticalScale(8)
+  },
+  btn : {
+    paddingTop: verticalScale(8), fontWeight: 'bold', fontSize: 15, paddingBottom: verticalScale(8), backgroundColor: 'black', borderWidth: 1, width: 120, borderRadius: 15
+  }
+})

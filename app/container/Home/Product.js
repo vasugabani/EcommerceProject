@@ -1,17 +1,58 @@
-import { View, Text, Image, ScrollView, Pressable, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, Image, ScrollView, Pressable, StyleSheet, TouchableOpacity, RefreshControl, ImageBackground } from 'react-native'
+import React, { useEffect } from 'react'
 import Button from '../../component/Button/Button'
 import Card from '../../component/Card/Card'
+import { useDispatch, useSelector } from 'react-redux'
+import { increment } from '../../redux/action/counter.action'
+import { getCategoryData } from '../../redux/slice/category.slice'
+import { getProductData } from '../../redux/slice/product.slice'
+import MasonryList from '@react-native-seoul/masonry-list';
 
 export default function Product({ navigation }) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategoryData())
+    dispatch(getProductData())
+  }, [])
+  const categorySel = useSelector(state => state.category);
+  // console.log("selector dataaaaaaaaaaaaaaaa", categorySel);
+
+  const productSel = useSelector(state => state.product)
+  // console.log("selectorrrrrrrrrrrrrrr",productSel);
+
+  const tempArr = [...productSel.product]
+
+  const sortedArr = tempArr.sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt)
+  })
+    .slice(0, 5);
+  console.log(sortedArr, "4444444444444444444444444444444444");
+
+  const saleData = productSel.product.filter((v) => v.discount >= 30)
+  console.log(saleData, "222222222222222222222222222222222");
+
+  const handlePresss = () => {
+    dispatch(increment())
+  }
+  const counter = useSelector(state => state.counter)
   return (
+
     <View style={style.containor}>
       {/* <Text>Product</Text> */}
+
+      <TouchableOpacity onPress={() => handlePresss()}>
+        <Text>+</Text>
+      </TouchableOpacity>
+      <Text>{counter.count}</Text>
+
+
+
       <ScrollView
         scrollEventThrottle={16}
       >
         <Image
-          style={{ position: 'relative' , width:'100%' }}
+          style={{ position: 'relative', width: '100%' }}
           source={require('../../../assets/image/BigBanner.png')}
         />
 
@@ -35,40 +76,22 @@ export default function Product({ navigation }) {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
         >
-
-          <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')}>
-            <Card
-              imguri={require('../../../assets/image/fashion.jpg')}
-              title="Dorothy Perkins"
-              mainTitle='Evening Dreese'
-              Dollar={'12$'}
-              discount='NEW'
-              disColor='black'
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')}>
-            <Card
-              imguri={require('../../../assets/image/mens.jpg')}
-              title="Sitlly"
-              mainTitle='Denim Jacket'
-              Dollar={'19$'}
-              discount='NEW'
-              disColor='black'
-
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')}>
-            <Card
-              imguri={require('../../../assets/image/girls.jpg')}
-              title="Dorothy Perkins"
-              mainTitle='Evening Dreese'
-              Dollar={'20$'}
-              discount='NEW'
-              disColor='black'
-
-            />
-          </TouchableOpacity>
+          {
+            sortedArr.map((v, i) => (
+              <View key={i}>
+                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails',{id:v.id})}>
+                  <Card
+                    imgref={v.image}
+                    title={v.title}
+                    mainTitle={v.brand}
+                    Dollar={v.price}
+                    discount={'New'}
+                    disColor='black'
+                  />
+                </TouchableOpacity>
+              </View>
+            ))
+          }
         </ScrollView>
 
 
@@ -85,85 +108,64 @@ export default function Product({ navigation }) {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')}>
-            <Card
-              imguri={require('../../../assets/image/mens3.jpg')}
-              title="Dorothy Perkins"
-              mainTitle='Denim Jacket'
-              Dollar={'12$'}
-              discount='-20%'
-              disColor='#DB3022'
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')}>
-
-            <Card
-              imguri={require('../../../assets/image/newfashion.jpg')}
-              title="Sitlly"
-              mainTitle='Sport Dress'
-              Dollar={'19$'}
-              discount='-15%'
-              disColor='#DB3022'
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')}>
-
-            <Card
-              imguri={require('../../../assets/image/mens.jpg')}
-              title="Dorothy Perkins"
-              mainTitle='Denim Jacket'
-              Dollar={'20$'}
-              discount='-20%'
-              disColor='#DB3022'
-            />
-          </TouchableOpacity>
-
+          {
+            saleData.map((v, i) => (
+              <View key={i}>
+                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails',{id:v.id})}>
+                  <Card
+                    imgref={v.image}
+                    title={v.title}
+                    mainTitle={v.brand}
+                    Dollar={v.price}
+                    discount={v.discount}
+                    disColor='black'
+                  />
+                </TouchableOpacity>
+              </View>
+            ))
+          }
         </ScrollView>
 
-        <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
-          <Image
-            style={{ marginTop: 20 ,width:'100%'}}
-            source={require('../../../assets/image/main.png')}
-          />
-          <Text style={{ color: 'white', position: 'absolute', marginTop: 1580, fontSize: 30, marginLeft: 135 }}>New Collection</Text>
-        </TouchableOpacity>
-
-
-        <View style={style.collectionBox}>
-
-          <View style={{ width: 180, height: 380 }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
-              <View style={{ width: 180, height: 170, }}>
-                <Text style={{ color: '#DB3022', fontSize: 35, marginTop: 35, marginLeft: 16 }}>Summer </Text>
-                <Text style={{ color: '#DB3022', fontSize: 35, marginLeft: 16 }}>Sale </Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
-              <View style={{ width: 170, height: 200 }}>
-                <Image
-                  style={{ width: 180, height: 200 }}
-                  source={require('../../../assets/image/Black.png')}
-                />
-                <Text style={{ position: 'absolute', color: 'white', left: 0, bottom: 0, marginBottom: 16, marginHorizontal: 16, fontSize: 35 }}>Black</Text>
-              </View>
-            </TouchableOpacity>
+        {/* {
+          <MasonryList 
+          data={categorySel.category}
+          keyExtractor={(item)  => item.id}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item}) => <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
+            
+          <View style={style.deco3}>
+            <Image
+              style={style.imgBox3}
+              source={{uri:item.image}}
+            />
+            <Text style={style.deco3txt}>{item.name}</Text>
           </View>
+        </TouchableOpacity>}
+          // refreshing={RefreshControl}
+          onRefresh={() => refetch({first: ITEM_CNT})}
+          onEndReachedThreshold={0.1}
+          onEndReached={() => loadNext(ITEM_CNT)}
+          />
+        } */}
 
-          <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
-            <View style={{ width: 180, height: 380, }}>
-              <Image
-                style={{ width: 220, height: "100%" }}
-                source={require("../../../assets/image/mensHoodie.png")}
-              />
-            </View>
-          </TouchableOpacity>
+        <View style={style.mainDiv}>
+          {
+            categorySel.category.map((v, i) => {
+              return (
+                <TouchableOpacity onPress={() => navigation.navigate('Categories',{id:v.id})} style={style[`category${i % 3 + 1}`]}>
+                  <Image
+                    style={style.imagBox}
+                    source={{ uri: v.image }}
+                  />
+                  <Text style={style[`deco${i % 3 + 1}`]}>{v.name}</Text>
+                </TouchableOpacity>
+              )
+            })
+          }
         </View>
-        {/* <Button
-          title='Go to Categories'
-          onPress={() => navigation.navigate('Categories')}
-        /> */}
+
+        
       </ScrollView>
     </View>
 
@@ -196,12 +198,81 @@ const style = StyleSheet.create({
     // width: 370,
     height: 370,
     flexDirection: 'row',
-   
+
   },
   imgStyle: {
     resizeMode: 'contain',
     marginLeft: 176,
     width: '100%',
     height: '100%',
+  },
+  image1: {
+    width: 140,
+    height: 180,
+    borderRadius: 8,
+    resizeMode: 'cover'
+  },
+  parentBox: {
+    marginHorizontal: 16,
+  },
+  box: {
+    width: 140,
+    height: 180,
+    marginTop: 24,
+    borderRadius: 6,
+    backgroundColor: '#DADADA',
+    position: 'relative',
+
+  },
+  deatilBox: {
+    marginTop: 10,
+    color: 'black',
+    width: 140,
+
+  },
+  title: {
+    color: 'black',
+    fontSize: 10
+  },
+  mainTitle: {
+    color: 'black',
+    fontSize: 16
+  },
+  Dollar: {
+    color: 'black',
+    fontSize: 14,
+    color: '#DB3022'
+  },
+  deco1: {
+    color: 'white', position: 'absolute', fontSize: 30, marginLeft: 110, textAlign: 'center', fontWeight: 'bold', width: 200,backgroundColor:"rgba(0,0,0,0.5)"
+  },
+  deco2: {
+    color: 'white', position: 'absolute', fontSize: 30, textAlign: 'center', fontWeight: 'bold',left:60
+  }, 
+  deco3: {
+    color: 'white', position: 'absolute', fontSize: 30, textAlign: 'center', fontWeight: 'bold',left:60
+  },
+  imagBox: {
+    objectFit: 'cover',
+    height: '100%',
+    width: '100%',
+    resizeMode: 'cover'
+  },
+  category1: {
+    width: '100%',
+    height: 300,
+  },
+  category2: {
+    width: '50%',
+    height: 300,
+  },
+  category3: {
+    width: '50%',
+    height: 300,
+  },
+  mainDiv: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   }
 })
