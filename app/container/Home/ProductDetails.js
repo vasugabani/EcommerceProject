@@ -8,6 +8,7 @@ import { horizontalScale, moderateScale, verticalScale } from '../../constant/Me
 import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductData } from '../../redux/slice/product.slice';
+import { addToCart } from '../../redux/slice/cart.slice';
 
 export default function ProductDetails({ navigation }) {
   const [data, setData] = useState([])
@@ -60,6 +61,11 @@ export default function ProductDetails({ navigation }) {
 
   const filterData = productSel.product.filter((v) => v.id == id)
   console.log(filterData, "filterdataaaaaaaaaaaaaaaaaaa");
+
+  const handleCart = (id) => {
+    // console.log(id,"ididididididididididididididi");
+    dispatch(addToCart(id))
+  }
 
   return (
     <ScrollView style={style.cointener}>
@@ -144,26 +150,17 @@ export default function ProductDetails({ navigation }) {
             )
           })
         }
-        {/* <View style={style.textbox}>
-          <View ><Text style={{ fontSize: moderateScale(30), color: 'black' }}>H & M</Text></View>
-          <View style={{ marginLeft: horizontalScale(200), marginTop: verticalScale(10) }}><Text style={{ fontSize: moderateScale(20), color: 'black' }}>$19.99</Text></View>
-        </View>
-        <Text>Short Black Dress</Text> */}
-        {/* <View style={{ flexDirection: 'row', marginTop: verticalScale(5) }}>
-          <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
-          <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
-          <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
-          <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
-          <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
-          <Text>(10)</Text>
-        </View> */}
 
-        {/* <Text style={{ fontSize: moderateScale(16), color: 'black', marginTop: verticalScale(5) }}>Short dress in soft cottoon jerseyy with decoorative buttons down the front and a wide, frill-trimmed square neckline with concealed elastication. Elasticated seam under the bust and short puff sleeves with a small frill trim.</Text> */}
       </View>
       <View style={{ width: '100%', height: verticalScale(100), backgroundColor: 'white', padding: 30, marginTop: verticalScale(15) }}>
         <AppButton
           titel="ADD TO CART"
-          onPress={() => navigation.navigate('Bag')}
+          onPress={() => {
+            filterData.map((v) => {
+              handleCart(v.id)
+              navigation.navigate('Bag')
+            })
+          }}
         />
       </View>
 
