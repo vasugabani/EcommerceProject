@@ -31,7 +31,7 @@ export const { addToCart } = cartSlice.actions;
 export default cartSlice.reducer
 
 // [
-//     {id: 15, qty: 3},
+//     {id: 15, name:sdd, qty: 3},
 //     {id: 24, qty: 2},
 //       {id: 85, qty: 1},
 // ]

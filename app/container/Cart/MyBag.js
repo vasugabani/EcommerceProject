@@ -4,8 +4,21 @@ import BagCard from '../../component/Card/BagCard'
 import Feather from 'react-native-vector-icons/Feather';
 import AppButton from '../../component/Button/AppButton';
 import { horizontalScale, moderateScale, verticalScale } from '../../constant/Metrices';
+import { useSelector } from 'react-redux';
 
 export default function MyBag({ navigation }) {
+  const product = useSelector(state => state.product);
+  const cart = useSelector(state => state.cart);
+
+  console.log(cart);
+
+  const allCartData = cart.cart.map((c) => {
+    const productObj = product.product.find((p) => p.id === c.id);
+
+    return { ...productObj, qty: c.qty }
+  });
+
+  console.log(allCartData);
 
   const HandleAction = () => {
     navigation.navigate('Address')
@@ -14,31 +27,22 @@ export default function MyBag({ navigation }) {
   return (
     <View>
       <ScrollView>
-        <Text style={{fontWeight:'bold',fontSize:32,marginTop: verticalScale(14), marginLeft: horizontalScale(20),color:'black'}}>My Bag</Text>
-        <BagCard
-          imgurl={require('../../../assets/image/beautiful-young-woman-dress-walking-isolated-white-background.jpg')}
-          color="white"
-          size="L"
-          price="$27"
-          contity="1"
-          Product="T-Shirt"
-        />
-        <BagCard
-          imgurl={require('../../../assets/image/beautiful-young-woman-dress-walking-isolated-white-background.jpg')}
-          color="white"
-          size="M"
-          price="$18"
-          contity="3"
-          Product="T-Shirt"
-        />
-        <BagCard
-          imgurl={require('../../../assets/image/beautiful-young-woman-dress-walking-isolated-white-background.jpg')}
-          color="Blue"
-          size="X"
-          price="$25"
-          contity="1"
-          Product="Night Dress"
-        />
+        <Text style={{ fontWeight: 'bold', fontSize: 32, marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>My Bag</Text>
+
+        {
+          allCartData.map((v) => (
+            <BagCard
+              imgurl={require('../../../assets/image/beautiful-young-woman-dress-walking-isolated-white-background.jpg')}
+              color="white"
+              size="L"
+              price="$27"
+              contity="1"
+              Product={v.title}
+            />
+          ))
+        }
+
+
       </ScrollView>
       <View style={{ flexDirection: 'row' }}>
         <TextInput
@@ -49,14 +53,14 @@ export default function MyBag({ navigation }) {
           placeholder="Enter Your Promo Code"
           keyboardType="numeric"
         />
-        <TouchableOpacity style={{ width: horizontalScale(40), height: verticalScale(40), backgroundColor: 'black', borderRadius: moderateScale(100), marginTop: verticalScale(20), padding: 10,marginLeft:horizontalScale(45) }}>
+        <TouchableOpacity style={{ width: horizontalScale(40), height: verticalScale(40), backgroundColor: 'black', borderRadius: moderateScale(100), marginTop: verticalScale(20), padding: 10, marginLeft: horizontalScale(45) }}>
           <Feather name='arrow-right' size={moderateScale(18)} color="white" />
         </TouchableOpacity>
       </View>
 
       <View style={{ flexDirection: 'row', marginTop: verticalScale(30), marginLeft: horizontalScale(20), }}>
         <Text style={{ fontSize: moderateScale(15), marginTop: 5 }}>Total Amount:</Text>
-        <Text style={{ fontSize: moderateScale(18), marginLeft: 200, color: 'black',fontWeight:'bold' }}>$102</Text>
+        <Text style={{ fontSize: moderateScale(18), marginLeft: 200, color: 'black', fontWeight: 'bold' }}>$102</Text>
       </View>
       <View style={{ marginTop: verticalScale(10) }}>
         <AppButton
