@@ -8,6 +8,7 @@ import { horizontalScale, moderateScale, verticalScale } from '../../constant/Me
 import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductData } from '../../redux/slice/product.slice';
+import { addToCart } from '../../redux/slice/cart.slice';
 
 export default function ProductDetails({ navigation }) {
   const [data, setData] = useState([])
@@ -60,6 +61,12 @@ export default function ProductDetails({ navigation }) {
 
   const filterData = productSel.product.filter((v) => v.id == id)
   console.log(filterData, "filterdataaaaaaaaaaaaaaaaaaa");
+
+  
+  const handleCart = (id) => {
+    console.log("iddddddddddddddddddd", id);
+    dispatch(addToCart(id))
+  }
 
   return (
     <ScrollView style={style.cointener}>
@@ -163,7 +170,12 @@ export default function ProductDetails({ navigation }) {
       <View style={{ width: '100%', height: verticalScale(100), backgroundColor: 'white', padding: 30, marginTop: verticalScale(15) }}>
         <AppButton
           titel="ADD TO CART"
-          onPress={() => navigation.navigate('Bag')}
+          onPress={() => {
+            filterData.map((v) => {
+                handleCart(v.id),
+                navigation.navigate('Bag')
+            })
+          }}
         />
       </View>
 
