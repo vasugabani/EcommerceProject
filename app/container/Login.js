@@ -1,15 +1,32 @@
-import { View, Text, StyleSheet, StatusBar, TextInput, Button, Pressable, Image } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, TextInput, Button, Pressable, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 // import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
 
-export default function SignUp({navigation}) {
-  const [password, setpassword] = useState('');
-  const [name, setname] = useState('');
-  const [email, setemail] = useState('');
+export default function Login({ navigation }) {
 
+  const loginSchema = yup.object({
+    email: yup.string().email().required(),
+    password: yup.string().matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/, "enter strong password").required(),
+  });
 
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values, { resetForm }) => {
+      console.log(values);
+
+      resetForm();
+    },
+  });
+
+  const { handleChange, handleBlur, handleSubmit, errors, touched, values } = formik
 
   return (
     <View style={style.container}>
@@ -17,36 +34,42 @@ export default function SignUp({navigation}) {
         animated={true}
         backgroundColor="#f5f5f5"
         barStyle="dark-content"
-
       />
-      <MaterialIcons style={style.icon} name="keyboard-arrow-left" color={'black'} size={34} />
+
+      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+        <MaterialIcons style={style.icon} name="keyboard-arrow-left" color={'black'} size={34} /></TouchableOpacity>
       <Text style={style.text}>Login</Text>
 
       <TextInput
         style={style.input1}
-        onChangeText={setemail}
-        value={email}
+        name='email'
         placeholder='Email'
         placeholderTextColor="grey"
-
+        onChangeText={handleChange('email')}
+        onBlur={handleBlur('email')}
+        value={values.email}
       />
+      {touched.email && errors.email ? <Text style={style.error}>{errors.email}</Text> : null}
+
       <TextInput
         style={style.inputtext}
-        onChangeText={setpassword}
-        value={password}
+        name='password'
         placeholder='Password'
-        keyboardType='numeric'
         placeholderTextColor="grey"
-
+        onChangeText={handleChange('password')}
+        onBlur={handleBlur('password')}
+        value={values.password}
       />
-      <Text style={{ color: 'black', marginLeft: 184, marginTop: 8 }}>Forget Your Password <FontAwesome style={style.icon} name="long-arrow-right" color={'red'} size={19} /></Text>
+      {touched.password && errors.password ? <Text style={style.error}>{errors.password}</Text> : null}
 
-     
+      <TouchableOpacity onPress={() => navigation.navigate('Password')}>
+        <Text style={{ color: 'black', marginLeft: 184, marginTop: 8 }}>Forget Your Password <FontAwesome style={style.icon} name="long-arrow-right" color={'red'} size={19} /></Text>
+      </TouchableOpacity>
 
       <Pressable
         style={style.buttontxt}
-        onPress={() =>navigation.navigate('Product')}>
-        <Text style={{ color: 'white'  , fontSize : 20}}>Login</Text>
+        onPress={handleSubmit}>
+        <Text style={{ color: 'white', fontSize: 20 }}>Login</Text>
 
       </Pressable>
       <View style={style.parent}>
@@ -69,83 +92,87 @@ export default function SignUp({navigation}) {
 }
 const style = StyleSheet.create({
   container: {
-      // height : 'auto',
-      height: 1000,
-      backgroundColor: '#f5f5f5',
-      // marginHorizontal : 16,
+    // height : 'auto',
+    height: 1000,
+    backgroundColor: '#f5f5f5',
+    // marginHorizontal : 16,
   },
   text: {
-      color: 'black',
-      fontSize: 30,
-      marginTop: 20,
-      // fontWeight : 'bold'
-      marginHorizontal: 16,
-      fontFamily: 'METRO POLICE BOLD'
+    color: 'black',
+    fontSize: 30,
+    marginTop: 20,
+    // fontWeight : 'bold'
+    marginHorizontal: 16,
+    fontFamily: 'METRO POLICE BOLD'
   },
   icon: {
-      marginTop: 15,
-      marginHorizontal: 16,
+    marginTop: 15,
+    marginHorizontal: 16,
   },
   buttontxt: {
-      // color : 'white',
-      backgroundColor: 'red',
-      marginHorizontal: 16,
-      padding: 12,
-      borderRadius: 30,
-      marginTop: 24,
-      // alignContent : 'center'
-      alignItems: 'center',
-      color: 'white',
+    // color : 'white',
+    backgroundColor: 'red',
+    marginHorizontal: 16,
+    padding: 12,
+    borderRadius: 30,
+    marginTop: 24,
+    // alignContent : 'center'
+    alignItems: 'center',
+    color: 'white',
   },
- 
+
   input1: {
-      marginTop: 70,
-      // borderWidth : 1,
-      marginHorizontal: 16,
-      padding: 20,
-      color: 'black',
-      backgroundColor: 'white',
-      borderRadius : 5
+    marginTop: 70,
+    // borderWidth : 1,
+    marginHorizontal: 16,
+    padding: 20,
+    color: 'black',
+    backgroundColor: 'white',
+    borderRadius: 5
 
   },
   inputtext: {
-      marginTop: 15,
-      backgroundColor: 'white',
-      padding: 20,
-      marginHorizontal: 16,
-      color: 'black',
-      borderRadius : 5
+    marginTop: 15,
+    backgroundColor: 'white',
+    padding: 20,
+    marginHorizontal: 16,
+    color: 'black',
+    borderRadius: 5
   },
   textStyle: {
-      color: 'black',
-      marginHorizontal: 16,
-      marginTop: 130,
-      alignItems: 'center'
-  }, 
-  parent : {
-      alignItems : 'center',
-      marginTop : 70
+    color: 'black',
+    marginHorizontal: 16,
+    marginTop: 130,
+    alignItems: 'center'
   },
-  btnstyle :{
-      marginTop : 10,
-      backgroundColor : 'white',
-      padding : 25,
-      width : 90,
-      marginHorizontal : 16,
-      borderRadius : 30,
-      marginLeft : 80,
+  parent: {
+    alignItems: 'center',
+    marginTop: 70
   },
-  btn :{
-      marginTop : 10,
-      backgroundColor : 'white',
-      padding : 25,
-      width : 90,
-      borderRadius : 30,
-      marginRight : 90,
+  btnstyle: {
+    marginTop: 10,
+    backgroundColor: 'white',
+    padding: 25,
+    width: 90,
+    marginHorizontal: 16,
+    borderRadius: 30,
+    marginLeft: 80,
   },
-  btnparent : {
-      flexDirection : 'row',
-      justifyContent : 'space-between',
-      // marginTop : 80
+  btn: {
+    marginTop: 10,
+    backgroundColor: 'white',
+    padding: 25,
+    width: 90,
+    borderRadius: 30,
+    marginRight: 90,
+  },
+  btnparent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // marginTop : 80
+  },
+  error: {
+    fontWeight: 'bold',
+    color: 'red'
   }
 })
