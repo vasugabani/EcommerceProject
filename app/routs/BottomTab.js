@@ -8,6 +8,7 @@ import Favourite from '../container/Favourite/Favourite';
 import MyProfile from '../container/Profile/MyProfile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import StackNavigation, { BagStack, FavouriteStack, HomeStack, ProfileStack, ShopStack } from './StackNavigation';
+import SignUp from '../container/SignUp';
 
 const Tab = createBottomTabNavigator();
 export default function BottomTab() {
@@ -49,7 +50,7 @@ export default function BottomTab() {
       <Tab.Screen name='Shop' component={ProductList} />
       <Tab.Screen name='Bag' component={MyBag} options={{headerShown:false,}}/>
       <Tab.Screen name='Favourite' component={Favourite} options={{headerShown:false,}}/>
-      <Tab.Screen name='Profile' component={MyProfile}  options={{headerShown:false}} />
+      <Tab.Screen name='Profile' component={SignUp}  options={{headerShown:false}} />
     </Tab.Navigator>
   )
 }
