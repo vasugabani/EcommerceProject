@@ -9,6 +9,7 @@ import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductData } from '../../redux/slice/product.slice';
 import { addToCart } from '../../redux/slice/cart.slice';
+import { addToFavourite } from '../../redux/slice/favourite.slice';
 
 export default function ProductDetails({ navigation }) {
   const [data, setData] = useState([])
@@ -18,25 +19,17 @@ export default function ProductDetails({ navigation }) {
 
   const dispatch = useDispatch()
   useEffect(() => {
-    GetData();
+    
     dispatch(getProductData())
   }, [])
 
   const productSel = useSelector(state => state.product)
-  console.log("detailsssssssssss", productSel);
 
-  const GetData = async () => {
-    const responce = await fetch('https://api.escuelajs.co/api/v1/products')
-    const pData = await responce.json();
-    // console.log(pData);
-
-    setData(pData)
-
-  }
-
-  const handleActive = () => {
+  const favouriteData = useSelector(state=>state.favourite)
+ 
+  const handleActive = (id) => {
     setActive(!active);
-    // console.log("ok");
+    dispatch(addToFavourite(id))
   }
   const handlepress = () => {
     Setmodel(true)
@@ -53,17 +46,11 @@ export default function ProductDetails({ navigation }) {
 
   const route = useRoute()
   const id = route.params?.id
-  console.log(id);
-
-
-  // let fdata = data.filter((v) => v.id == id)
-  // console.log("ddddd", fdata[0] && fdata[0].images);
 
   const filterData = productSel.product.filter((v) => v.id == id)
-  console.log(filterData, "filterdataaaaaaaaaaaaaaaaaaa");
 
   const handleCart = (id) => {
-    // console.log(id,"ididididididididididididididi");
+
     dispatch(addToCart(id))
   }
 
@@ -77,7 +64,7 @@ export default function ProductDetails({ navigation }) {
 
         {
           filterData.map((v, i) => {
-            // console.log(v,"1111111111111111111111111111111");
+            
             return (
               <View key={i}>
                 <View style={style.imagebox}>
@@ -91,21 +78,7 @@ export default function ProductDetails({ navigation }) {
             )
           })
         }
-        {/* {
-          fdata[0] && fdata[0].images.map((v) => (
-            <>
-              <View style={style.imagebox}>
-                <Image
-                  source={{uri: v}}
-                  style={{ width: '100%', height: '100%' }}
-                />
-              </View>
-            </>
-          ))
-        } */}
-
-
-      </ScrollView>
+     </ScrollView>
 
       <View style={style.disbox}>
 
@@ -118,10 +91,14 @@ export default function ProductDetails({ navigation }) {
             <Text style={{ marginLeft: horizontalScale(25), color: 'black', fontSize: moderateScale(15) }}>Color</Text>
           </TouchableOpacity>
 
+          {
+            filterData.map((v) => (
+              <TouchableOpacity onpress style={style.likebox} onPress={() => handleActive(v.id)}>
+                <MaterialCommunityIcons name={favouriteData.favourite.includes(v.id) ? 'cards-heart' : 'cards-heart-outline'} color={favouriteData.favourite.includes(v.id) ? 'red' : 'black'} size={moderateScale(20)} />
+              </TouchableOpacity>
+            ))
+          }
 
-          <TouchableOpacity style={style.likebox} onPress={() => handleActive()}>
-            <MaterialCommunityIcons name={active ? 'cards-heart' : 'cards-heart-outline'} color={active ? 'red' : 'black'} size={moderateScale(20)} />
-          </TouchableOpacity>
 
         </View>
 

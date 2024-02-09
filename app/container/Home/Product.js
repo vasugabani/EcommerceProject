@@ -32,22 +32,30 @@ export default function Product({ navigation }) {
   const saleData = productSel.product.filter((v) => v.discount >= 30)
   console.log(saleData, "222222222222222222222222222222222");
 
-  const handlePresss = () => {
-    dispatch(increment())
+  const handleCheck = () => {
+    categorySel.category.map((v)=>{
+      if(v.id == 'ppPlL2kXX5eBOTztFtzX'){
+        navigation.navigate('ProductList',{categoryID:'ppPlL2kXX5eBOTztFtzX'})
+      }
+    })
   }
-  const counter = useSelector(state => state.counter)
+
+  const handleNew = () => {
+    productSel.product.map((v)=>{
+      navigation.navigate('ProductList',{pid:v.id})
+    })
+    
+  }
+
+  const handleSale = () => {
+    productSel.product.map((v)=>{
+      navigation.navigate('ProductList',{sid:v.id})
+    })
+  }
   return (
 
     <View style={style.containor}>
-      {/* <Text>Product</Text> */}
-
-      <TouchableOpacity onPress={() => handlePresss()}>
-        <Text>+</Text>
-      </TouchableOpacity>
-      <Text>{counter.count}</Text>
-
-
-
+    
       <ScrollView
         scrollEventThrottle={16}
       >
@@ -61,7 +69,7 @@ export default function Product({ navigation }) {
           <Text style={{ color: 'white', fontSize: 50 }}>Sale</Text>
           <Pressable
             style={{ backgroundColor: '#DB3022', padding: 10, borderRadius: 20, marginTop: 20 }}
-            onPress={() => { }}>
+            onPress={() => handleCheck()}>
             <Text style={{ color: 'white', textAlign: 'center', }}>Check</Text>
           </Pressable>
         </View>
@@ -69,7 +77,9 @@ export default function Product({ navigation }) {
         <View style={{ position: 'relative', marginTop: 12 }}>
           <Text style={style.text}>New</Text>
           <Text style={style.subhead}>You’ve never seen it before!</Text>
-          <Text style={{ position: 'absolute', color: 'black', marginLeft: 300, marginTop: 35 }}>View all</Text>
+          <TouchableOpacity style={{position: 'absolute',}} onPress={()=>handleNew()}>
+          <Text style={{  color: 'black', marginLeft: 300, marginTop: 35 }}>View all</Text>
+          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -101,7 +111,9 @@ export default function Product({ navigation }) {
         <View style={{ flex: 1, marginTop: 30 }}>
           <Text style={style.text}>Sale</Text>
           <Text style={style.subhead}>Super Summer Sale</Text>
-          <Text style={{ position: 'absolute', color: 'black', marginLeft: 300, marginTop: 35 }}>View all</Text>
+          <TouchableOpacity style={{position: 'absolute',}} onPress={()=>handleSale()}>
+          <Text style={{  color: 'black', marginLeft: 300, marginTop: 35 }}>View all</Text>
+          </TouchableOpacity>
         </View>
 
         <ScrollView

@@ -2,59 +2,54 @@ import { View, Text, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import FavouriteCard from '../../component/Card/FavouriteCard'
 import { horizontalScale, moderateScale, verticalScale } from '../../constant/Metrices';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToFavourite } from '../../redux/slice/favourite.slice';
+import { addToCart } from '../../redux/slice/cart.slice';
 
-export default function Favourite({navigation}) {
+export default function Favourite({ navigation }) {
+
+  const dispatch = useDispatch()
+
+  const favData = useSelector(state => state.favourite)
+  // console.log(favData, "33333333333333333");
+  const productData = useSelector(state => state.product)
+
+  const favouriteData = favData.favourite.map((f) => {
+    // console.log(f, "444444444444444");
+    const productObj = productData.product.find((p) => p.id === f)
+    return { ...productObj }
+    // console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",productObj);  
+  })
+
+  const handleDelete = (id) => {
+    dispatch(addToFavourite(id))
+  }
+
+  const handleCart = (id) => {
+
+    dispatch(addToCart(id))
+  }
+
+  // console.log(favData,"1111111111111",productData);
   return (
-    <ScrollView style={{marginBottom: verticalScale(4)}}>
-      <Text style={{fontWeight:'bold',fontSize:32,marginTop: verticalScale(14), marginLeft: horizontalScale(20),color:'black'}}>Favourite</Text>
-      <FavouriteCard
-        img={require('../../../assets/image/beautiful-young-woman-dress-walking-isolated-white-background.jpg')}
-        color="White"
-        Product="T-Shirt"
-        price="$15"
-        size='M'
-        onPress={() => navigation.navigate('Bag')}
-      />
-      <FavouriteCard
-        img={require('../../../assets/image/front-view-smart-man-holding-his-glasses.jpg')}
-        color="White"
-        Product="T-Shirt"
-        price="$12"
-        size='L'
-        onPress={() => navigation.navigate('Bag')}
-      />
-      <FavouriteCard
-        img={require('../../../assets/image/beautiful-young-woman-dress-walking-isolated-white-background.jpg')}
-        color="Blue"
-        Product="Dress"
-        price="$18"
-        size='XL'
-        onPress={() => navigation.navigate('Bag')}
-      />
-      <FavouriteCard
-        img={require('../../../assets/image/front-view-smart-man-holding-his-glasses.jpg')}
-        color="SkyBlue"
-        Product="Koti"
-        price="$8"
-        size='XXL'
-        onPress={() => navigation.navigate('Bag')}
-      />
-      <FavouriteCard
-        img={require('../../../assets/image/man-gray-pajamas-comfy-sleepwear-apparel-full-body.jpg')}
-        color="black"
-        Product="Shirt"
-        price="$16"
-        size='S'
-        onPress={() => navigation.navigate('Bag')}
-      />
-      <FavouriteCard
-        img={require('../../../assets/image/man-gray-pajamas-comfy-sleepwear-apparel-full-body.jpg')}
-        color="black"
-        Product="Shirt"
-        price="$16"
-        size='S'
-        onPress={() => navigation.navigate('Bag')}
-      />
+    <ScrollView style={{ marginBottom: verticalScale(4) }}>
+      <Text style={{ fontWeight: 'bold', fontSize: 32, marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Favourite</Text>
+
+      {
+        favouriteData.map((v,i) => (
+          <View key={i}>
+          <FavouriteCard
+            img={v.image}
+            color="White"
+            Product={v.title}
+            price={v.price}
+            size='M'
+            onPress={() => {navigation.navigate('Bag'),handleCart(v.id)}}
+            deletefav={()=>handleDelete(v.id)}
+          />
+          </View>
+        ))
+      }
     </ScrollView>
   )
 }

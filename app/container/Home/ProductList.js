@@ -13,21 +13,28 @@ import { getCategoryData } from '../../redux/slice/category.slice';
 
 export default function ProductList({ navigation }) {
   const [sort, setSort] = useState('');
-  const [data, setData] = useState([])
+  // const [data, setData] = useState([])
   const [modal, setmodel] = useState(false)
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('')
-  console.log(category,"111111111111111111111111111111111111111111");
+  // const [disible, setdisible] = useState('')
+  console.log(category, "111111111111111111111111111111111111111111");
   // console.log(search);
   // let arr = [];
 
   const route = useRoute()
-  const id = route.params?.id
+  const subid = route.params?.id
   // console.log(id);
 
   const category_id = route.params?.category_id
   // console.log(category_id);
-  
+
+  const cID = route.params?.categoryID
+  // console.log();
+
+  const pID=route.params?.pid
+
+  const sID=route.params?.sid
 
   const handlepress = () => {
     setmodel(true)
@@ -51,19 +58,32 @@ export default function ProductList({ navigation }) {
 
   const searchSortData = () => {
     let fData;
+    let  sData=[...productSel.product]
 
-    console.log(category,"cccccccccccccccccccccccccccccc");
+    // console.log(category,"cccccccccccccccccccccccccccccc");
 
-    if(category){
-      fData = productSel.product.filter((v)=>v.subCategory == category)
-    }else if(category == ''){
-      fData = fData
-    }else {
-      fData = productSel.product.filter((v) => v.subCategory == id)
+    if (category == 'all') {
+      fData = productSel.product.filter((v) => v.category == category_id)
+    } else if (category) {
+      fData = productSel.product.filter((v) => v.subCategory == category)
+    } else if (subid) {
+      fData = productSel.product.filter((v) => v.subCategory == subid)
+    }else if(cID){
+      fData=productSel.product.filter((v)=>v.category == cID)
+    }else if(pID){
+      fData=sData.sort((a,b)=>{
+        return new Date(b.createdAt) - new Date(a.createdAt)
+      })
+    }else if(sID){
+      fData=sData.sort((a,b)=>{
+        return b.discount - a.discount
+      })
+    } else {
+      fData = productSel.product
     }
 
-    console.log(fData,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-    
+    console.log(fData, "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+
 
     fData = fData.filter((v) =>
       v.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -85,10 +105,10 @@ export default function ProductList({ navigation }) {
 
     return fData;
   }
-
   const finalData = searchSortData();
 
-
+  const filterData = subCatData.subCatData.filter((v) => v.category === category_id)
+  console.log(filterData, "22222222222222222222222222222222222222222");
   // const a = subCatData.subCatData.filter((v) => v.category === id);
   // console.log("aaaaaaaaaaaa", a, id, subCatData.subCatData);
 
@@ -99,25 +119,26 @@ export default function ProductList({ navigation }) {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={{ flexDirection: 'row', }}>
 
+            {
+              filterData == '' ? style.ok : <ShoppingButton
             
-            <ShoppingButton
-              // key={i}
-              title='All'
-              onPress={() => setCategory('')}
-            />
-
+                // key={i}
+                title='All'
+                onPress={() => setCategory('all')}
+              />
+            }
 
             {
-              subCatData.subCatData.filter((v) => v.category === category_id).map((val, i) => {
-                return (
-                  <ShoppingButton
-                    key={i}
-                    title={val.subCatName}
-                    onPress={() => setCategory(val.id)}
-                  />
-                )
 
-              })
+              filterData.map((val, i) => (
+                <ShoppingButton
+                  key={i}
+                  title={val.subCatName}
+                  onPress={() => setCategory(val.id)}
+                />
+              ))
+
+
             }
 
           </View>
