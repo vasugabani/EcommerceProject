@@ -14,6 +14,9 @@ import Address from '../container/Cart/Address';
 import Payment from '../container/Cart/Payment';
 import Success from '../container/Cart/Success';
 import MyOrder from '../container/Profile/MyOrder';
+import SignUp from '../container/SignUp';
+import Login from '../container/Login';
+import Password from '../container/Password';
 
 // export default function StackNavigation({ navigation }) {
 
@@ -177,6 +180,17 @@ import MyOrder from '../container/Profile/MyOrder';
             ),
           }}
         />
+        <Stack.Screen name='SignUp' component={SignUp} 
+        options={{
+          headerShown:false
+        }}/>
+        <Stack.Screen name='Login' component={Login} 
+        options={{
+          headerShown:false
+        }}/>
+        <Stack.Screen name='Password' component={Password} options={{
+          headerShown:false
+        }}/>
       </Stack.Navigator>
     )
   }
