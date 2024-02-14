@@ -3,7 +3,7 @@ import auth from '@react-native-firebase/auth';
 
 const initialState = {
     isLoading: false,
-    auth: [],
+    user: null,
     error: null
 }
 
@@ -14,8 +14,9 @@ export const signupEmailPass = createAsyncThunk(
 
         await auth()
             .createUserWithEmailAndPassword(data.email, data.password)
-            .then(() => {
-                console.log('User account created & signed in!');
+            .then(async (userCredential) => {
+                console.log('User account created & signed in!', userCredential);
+                await userCredential.user.sendEmailVerification();
             })
             .catch(error => {
                 if (error.code === 'auth/email-already-in-use') {
@@ -32,12 +33,57 @@ export const signupEmailPass = createAsyncThunk(
     }
 )
 
+export const loginEmailPass = createAsyncThunk(
+    'auth/loginEmailPass',
+
+    async (data) => {
+        console.log("000000000000000", data);
+        const user = await auth()
+            .signInWithEmailAndPassword(data.email, data.password)
+            .then((user) => {
+                console.log('User account created & signed in!', user);
+
+                if (user.user.emailVerified) {
+                    console.log("your account is log in ");
+
+                    return user.user;
+                } else {
+                    console.log("please verify your email");
+                }
+
+
+            })
+
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    console.log('That email address is already in use!');
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    console.log('That email address is invalid!');
+                }
+
+                if (error.code === 'auth/invalid-credential') {
+                    console.log("invalid email or password");
+                }
+
+                console.error(error);
+            });
+
+        return user;
+    }
+)
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: initialState,
     reducers: {},
-    extraReducers: {
+    extraReducers: (builder) => {
+        builder.addCase(loginEmailPass.fulfilled, (state, action) => {
+            console.log("888888888888888", action);
 
+            state.user = action.payload;
+        })
     }
 });
 

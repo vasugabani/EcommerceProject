@@ -9,12 +9,23 @@ import MyProfile from '../container/Profile/MyProfile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import StackNavigation, { BagStack, FavouriteStack, HomeStack, ProfileStack, ShopStack } from './StackNavigation';
 import SignUp from '../container/SignUp';
+import { useSelector } from 'react-redux';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Login from '../container/Login';
+import Password from '../container/Password';
 
 const Tab = createBottomTabNavigator();
+
+const Stack = createNativeStackNavigator();
 export default function BottomTab() {
+  const auth = useSelector(state=>state.auth)
+  console.log("7777777777777777777777",auth);
 
   
   return (
+
+    auth.user ? 
+    
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerTitleAlign: 'center',
@@ -50,17 +61,24 @@ export default function BottomTab() {
       <Tab.Screen name='Shop' component={ProductList} />
       <Tab.Screen name='Bag' component={MyBag} options={{headerShown:false,}}/>
       <Tab.Screen name='Favourite' component={Favourite} options={{headerShown:false,}}/>
-      <Tab.Screen name='Profile' component={SignUp}  options={{headerShown:false}} />
+      <Tab.Screen name='Profile' component={MyProfile}  options={{headerShown:false}} />
     </Tab.Navigator>
+
+    :
+    
+    <Stack.Navigator>
+      <Stack.Screen name='SignUp' component={SignUp} 
+        options={{
+          headerShown:false
+        }}/>
+        <Stack.Screen name='Login' component={Login} 
+        options={{
+          headerShown:false
+        }}/>
+        <Stack.Screen name='Password' component={Password} options={{
+          headerShown:false
+        }}/>
+    </Stack.Navigator>
   )
 }
 
-{/* <Tab.Screen name='Home' component={StackNavigation}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen name='Shop' component={ProductList} />
-      <Tab.Screen name='Bag' component={MyBag} options={{headerShown:false,}}/>
-      <Tab.Screen name='Favourite' component={Favourite} options={{headerShown:false,}}/>
-      <Tab.Screen name='Profile' component={MyProfile}  options={{headerShown:false}} /> */}

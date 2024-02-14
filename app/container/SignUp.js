@@ -45,7 +45,7 @@ export default function SignUp({ navigation }) {
         barStyle="dark-content"
 
       />
-      <MaterialIcons style={style.icon} name="keyboard-arrow-left" color={'black'} size={20} />
+      {/* <MaterialIcons style={style.icon} name="keyboard-arrow-left" color={'black'} size={20} /> */}
       <Text style={style.text}>Sign up</Text>
 
       <TextInput

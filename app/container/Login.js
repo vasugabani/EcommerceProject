@@ -5,8 +5,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { loginEmailPass } from '../redux/slice/auth.slice';
 
 export default function Login({ navigation }) {
+
+  const dispatch = useDispatch()
 
   const loginSchema = yup.object({
     email: yup.string().email().required(),
@@ -21,7 +25,7 @@ export default function Login({ navigation }) {
     validationSchema: loginSchema,
     onSubmit: (values, { resetForm }) => {
       console.log(values);
-
+      dispatch(loginEmailPass(values))
       resetForm();
     },
   });
