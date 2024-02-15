@@ -7,27 +7,30 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { signupEmailPass } from '../redux/slice/auth.slice';
+import { signinGoogle, signupEmailPass } from '../redux/slice/auth.slice';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 
 export default function SignUp({ navigation }) {
-
+  GoogleSignin.configure({
+    webClientId: '442714432717-8kpq72qq5t3227ihdc11dio3s0fftu5g.apps.googleusercontent.com',
+  })
   const accountSchema = yup.object({
-    name:yup.string().matches(/^[a-zA-z]{2,16}$/,'Name must be between 2 characters').required('Please enter your Name'),
-    email:yup.string().email().required(),
-    password:yup.string().matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/, "enter strong password").required(),
+    name: yup.string().matches(/^[a-zA-z]{2,16}$/, 'Name must be between 2 characters').required('Please enter your Name'),
+    email: yup.string().email().required(),
+    password: yup.string().matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/, "enter strong password").required(),
   });
 
   const dispatch = useDispatch();
 
   const formik = useFormik({
-    initialValues:{
-      name:'',
-      email:'',
-      password:'',
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
     },
-    validationSchema:accountSchema,
-    onSubmit: (values,{resetForm}) => {
+    validationSchema: accountSchema,
+    onSubmit: (values, { resetForm }) => {
       console.log(values);
 
       dispatch(signupEmailPass(values));
@@ -35,7 +38,7 @@ export default function SignUp({ navigation }) {
     },
   });
 
-  const {handleChange,handleBlur,handleSubmit,errors,touched,values} = formik
+  const { handleChange, handleBlur, handleSubmit, errors, touched, values } = formik
 
   return (
     <View style={style.container}>
@@ -82,7 +85,7 @@ export default function SignUp({ navigation }) {
       />
       {touched.password && errors.password ? <Text style={style.error}>{errors.password}</Text> : null}
 
-      <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={{ color: 'black', marginLeft: 170, marginTop: 8 }}>Alreay have an account? </Text>
       </TouchableOpacity>
       {/* <View style = {style.buttontxt}>
@@ -95,7 +98,7 @@ export default function SignUp({ navigation }) {
 
       <TouchableOpacity style={style.buttontxt} onPress={handleSubmit}>
         <Text style={{ color: 'white' }}>SIGN UP</Text>
-        </TouchableOpacity>
+      </TouchableOpacity>
       <View style={style.parent}>
         <Text style={style.textStyle}>Or sign up with social account</Text>
       </View>
@@ -103,7 +106,7 @@ export default function SignUp({ navigation }) {
       <View style={style.btnparent}>
         <Pressable
           style={style.btnstyle}
-          onPress={() => ('')}>
+          onPress={() => dispatch(signinGoogle())}>
         </Pressable>
         <Pressable
           style={style.btn}
@@ -202,8 +205,8 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  error:{
-    fontWeight:'bold',
-    color:'red'
+  error: {
+    fontWeight: 'bold',
+    color: 'red'
   }
 })

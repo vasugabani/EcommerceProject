@@ -12,7 +12,20 @@
           "package_name": "com.adminecommerce"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "442714432717-svnfe2uuvl6hik4mmmpb0bunnoas537v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adminecommerce",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "442714432717-8kpq72qq5t3227ihdc11dio3s0fftu5g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDxYN3JF0MaIJSg3b1qFLhrhw0uLasxywo"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442714432717-8kpq72qq5t3227ihdc11dio3s0fftu5g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -31,7 +49,20 @@
           "package_name": "com.ecommerceproject"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "442714432717-1n2a24cekusjeefdd3eubvu6ds4hglfu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ecommerceproject",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "442714432717-8kpq72qq5t3227ihdc11dio3s0fftu5g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDxYN3JF0MaIJSg3b1qFLhrhw0uLasxywo"
@@ -39,7 +70,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442714432717-8kpq72qq5t3227ihdc11dio3s0fftu5g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

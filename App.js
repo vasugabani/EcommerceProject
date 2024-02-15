@@ -10,7 +10,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 
 
+
 export default class App extends Component {
+  
   render() {
     return (
       <Provider store={store}>
