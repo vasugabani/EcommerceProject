@@ -13,7 +13,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function SignUp({ navigation }) {
   GoogleSignin.configure({
-    webClientId: '442714432717-8kpq72qq5t3227ihdc11dio3s0fftu5g.apps.googleusercontent.com',
+    webClientId: '442714432717-q49m9gn1juiup0p95nvcl12l7h23bjrj.apps.googleusercontent.com',
   })
   const accountSchema = yup.object({
     name: yup.string().matches(/^[a-zA-z]{2,16}$/, 'Name must be between 2 characters').required('Please enter your Name'),

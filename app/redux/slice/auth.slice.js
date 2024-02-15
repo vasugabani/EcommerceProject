@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import auth from '@react-native-firebase/auth';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 const initialState = {
     isLoading: false,
     user: null,
@@ -37,33 +37,20 @@ export const signinGoogle = createAsyncThunk(
     'auth/signinGoogle',
     async () => {
 
+        // Check if your device supports Google Play
+        await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+        // Get the users ID token
+        const user = await GoogleSignin.signIn();
+        console.log("uuuuuuuuuuuuuuu", user);
 
-        try {
+        // Create a Google credential with the token
+        const googleCredential = auth.GoogleAuthProvider.credential(user.idToken);
 
-            // Check if your device supports Google Play
-            await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-            // Get the users ID token
-            const user = await GoogleSignin.signIn();
-            console.log("uuuuuuuuuuuuuuu", user);
+        console.log("ggggggggggggggggg", googleCredential);
 
-            // Create a Google credential with the token
-            const googleCredential = auth.GoogleAuthProvider.credential(user.idToken);
+        // Sign-in the user with the credential
+        return auth().signInWithCredential(googleCredential);
 
-            console.log("ggggggggggggggggg", googleCredential);
-
-            // Sign-in the user with the credential
-            return auth().signInWithCredential(googleCredential);
-        } catch (error) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // user cancelled the login flow
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                // operation (e.g. sign in) is in progress already
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                // play services not available or outdated
-            } else {
-                // some other error happened
-            }
-        }
     }
 )
 
