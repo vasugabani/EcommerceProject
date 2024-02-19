@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+
 const initialState = {
     isLoading: false,
     user: null,
@@ -54,6 +56,37 @@ export const signinGoogle = createAsyncThunk(
     }
 )
 
+export const signinFacebook = createAsyncThunk(
+    'auth/signinFacebook',
+    async () => {
+        try {
+            // Attempt login with permissions
+            const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+            if (result.isCancelled) {
+                throw new Error('User cancelled the login process');
+            }
+
+            // Once signed in, get the user's AccessToken
+            const data = await AccessToken.getCurrentAccessToken();
+
+            if (!data) {
+                throw new Error('Something went wrong obtaining access token');
+            }
+
+            // Create a Firebase credential with the AccessToken
+            const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+            // Sign-in the user with the credential
+            return auth().signInWithCredential(facebookCredential);
+        } catch (error) {
+            // Handle errors appropriately (e.g., log, display error message)
+            console.error('Facebook Signin Error:', error);
+            throw error; // Rethrow the error for the async thunk
+        }
+    }
+);
+
 export const loginEmailPass = createAsyncThunk(
     'auth/loginEmailPass',
 
@@ -106,6 +139,11 @@ const authSlice = createSlice({
             state.user = action.payload;
         })
         builder.addCase(signinGoogle.fulfilled, (state, action) => {
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaa", action);
+
+            state.user = action.payload;
+        })
+        builder.addCase(signinFacebook.fulfilled, (state, action) => {
             console.log("aaaaaaaaaaaaaaaaaaaaaaaa", action);
 
             state.user = action.payload;
