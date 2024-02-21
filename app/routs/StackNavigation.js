@@ -17,6 +17,7 @@ import MyOrder from '../container/Profile/MyOrder';
 import SignUp from '../container/SignUp';
 import Login from '../container/Login';
 import Password from '../container/Password';
+import UserInfo from '../container/Profile/UserInfo';
 
 // export default function StackNavigation({ navigation }) {
 
@@ -189,6 +190,10 @@ import Password from '../container/Password';
           headerShown:false
         }}/>
         <Stack.Screen name='Password' component={Password} options={{
+          headerShown:false
+        }}/>
+        <Stack.Screen name='UserInfo' component={UserInfo} 
+        options={{
           headerShown:false
         }}/>
       </Stack.Navigator>

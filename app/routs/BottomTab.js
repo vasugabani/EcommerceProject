@@ -61,7 +61,7 @@ export default function BottomTab() {
       <Tab.Screen name='Shop' component={ProductList} />
       <Tab.Screen name='Bag' component={MyBag} options={{headerShown:false,}}/>
       <Tab.Screen name='Favourite' component={Favourite} options={{headerShown:false,}}/>
-      <Tab.Screen name='Profile' component={SignUp}  options={{headerShown:false}} />
+      <Tab.Screen name='Profile' component={MyProfile}  options={{headerShown:false}} />
     </Tab.Navigator>
 
     :
