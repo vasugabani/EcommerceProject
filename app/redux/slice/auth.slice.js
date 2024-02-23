@@ -3,7 +3,7 @@ import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import firestore, { firebase } from '@react-native-firebase/firestore';
-
+import storage from '@react-native-firebase/storage';
 
 const initialState = {
     isLoading: false,
@@ -226,14 +226,14 @@ export const deleteAddress = createAsyncThunk(
 
         // console.log("uddddddddddddddddddddd", userData);
         return { ...userData, uid: data.uid };
-    
+
     }
 )
 
 export const updateAddress = createAsyncThunk(
     'auth/updateAddress',
     async (data) => {
-        console.log(data,"/////////////////////////////////");
+        console.log(data, "/////////////////////////////////");
         try {
             await firestore()
                 .collection('users')
@@ -249,14 +249,14 @@ export const updateAddress = createAsyncThunk(
         }
 
         await firestore()
-        .collection('users')
-        .doc(data.uid)
-        .update({
-            address: firestore.FieldValue.arrayUnion(data.address)
-        })
-        .then(() => {
-            console.log('User updated!');
-        });
+            .collection('users')
+            .doc(data.uid)
+            .update({
+                address: firestore.FieldValue.arrayUnion(data.address)
+            })
+            .then(() => {
+                console.log('User updated!');
+            });
 
         let userData;
 
@@ -277,6 +277,46 @@ export const updateAddress = createAsyncThunk(
         return { ...userData, uid: data.uid };
 
 
+    }
+)
+
+export const addUserInfo = createAsyncThunk(
+    'auth/addUserInfo',
+    async (data) => {
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", data);
+        // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", data.image.path);
+
+        let tempArr = data.values.image.path.split('/')
+        let imageName = tempArr[tempArr.length - 1]
+        console.log(imageName);
+
+        let rNo = Math.floor(Math.random() * 1000);
+
+        const imgFinalName = rNo + "_" + imageName;
+        console.log(imgFinalName);
+
+        const imgRef = storage().ref('users/' + imgFinalName);
+
+        const task = await imgRef.putFile(data.values.image.path);
+        console.log(task);
+
+        const imgRefPath = 'users/' + imgFinalName
+        const url = await storage().ref(imgRefPath).getDownloadURL();
+        console.log(url,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
+        await firestore()
+        .collection('users')
+        .doc(data.uid)
+        .update({
+            MobileNumber: data.values.number,
+            imagename:imgFinalName,
+            imageURL:url
+        })
+        .then(() => {
+            console.log('User updated!');
+        });
+
+    return data;
     }
 )
 

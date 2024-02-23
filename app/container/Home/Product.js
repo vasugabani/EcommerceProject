@@ -164,6 +164,7 @@ export default function Product({ navigation }) {
         <View style={style.mainDiv}>
           {
             categorySel.category.map((v, i) => {
+              console.log(v,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555");
               return (
                 <TouchableOpacity onPress={() => navigation.navigate('Categories',{id:v.id})} style={style[`category${i % 3 + 1}`]}>
                   <Image

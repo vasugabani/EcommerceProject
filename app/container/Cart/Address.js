@@ -142,7 +142,7 @@ export default function Address({ navigation }) {
 
       {
         authData.user.address.map((v,i)=>{
-          // console.log("=======================",v);
+          console.log("=======================",v);
           return(
             <View key={i} style={{marginTop:20}}>
               <Text>{v.name}</Text>
