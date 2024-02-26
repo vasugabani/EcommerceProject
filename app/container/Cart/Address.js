@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux'
 import { addAddress, deleteAddress, updateAddress } from '../../redux/slice/auth.slice'
-export default function Address({ navigation }) {
+export default function Address({ navigation,route }) {
 
   const [ update, setUpdate] = useState(false)
   const [oldData, setOldData] = useState(null)
@@ -52,14 +52,19 @@ export default function Address({ navigation }) {
     },
     validationSchema: addressSchema,
     onSubmit: (values, { resetForm }) => {
-    
-
-      if(update){
-        console.log("user updateddddddddd");
-        dispatch(updateAddress({address:values,oldData,uid:authData.user.uid}))
-      }else{
+      if(route.params?.previousScreen === 'CheckOut'){
+        navigation.navigate('CheckOut')
         dispatch(addAddress({address: values, uid:authData.user.uid}))
+      }else{
+        if(update){
+          console.log("user updateddddddddd");
+          dispatch(updateAddress({address:values,oldData,uid:authData.user.uid}))
+        }else{
+          dispatch(addAddress({address: values, uid:authData.user.uid}))
+        }
       }
+
+      
       
       resetForm();
       setUpdate(false)

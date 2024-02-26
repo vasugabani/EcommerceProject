@@ -26,7 +26,7 @@ export default function MyBag({ navigation }) {
   console.log(allData, "111111111111111111111111111111111");
 
   const HandleAction = () => {
-    navigation.navigate('Address')
+    navigation.navigate('CheckOut')
   }
 
   const handleIncrement = (data) => {

@@ -18,6 +18,7 @@ import SignUp from '../container/SignUp';
 import Login from '../container/Login';
 import Password from '../container/Password';
 import UserInfo from '../container/Profile/UserInfo';
+import CheckOut from '../container/Cart/CheckOut';
 
 // export default function StackNavigation({ navigation }) {
 
@@ -107,6 +108,20 @@ import UserInfo from '../container/Profile/UserInfo';
         <Stack.Screen name='Bag' component={MyBag}
           options={{
   
+            headerBackVisible: false,
+            headerLeft: () => (
+              <CustomButton
+                icon='chevron-left'
+                onClick={() => {
+                  navigation.goBack();
+                }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen name='CheckOut' component={CheckOut}
+          options={{
+            headerTitleAlign: 'center',
             headerBackVisible: false,
             headerLeft: () => (
               <CustomButton
