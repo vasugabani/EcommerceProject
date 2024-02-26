@@ -3,7 +3,7 @@ import React from 'react'
 import { horizontalScale, verticalScale } from '../../constant/Metrices';
 
 export default function ProductCard({ image, subTitle, title, price, discount, color, onPress}) {
-    // console.log(image.toString().substring(0,8) !== 'https://');
+    
     return (
         <View style={{ marginTop: 15,position:'relative', }}>
             <TouchableOpacity onPress={onPress}>

@@ -11,7 +11,7 @@ export default function Address({ navigation }) {
 
   const [ update, setUpdate] = useState(false)
   const [oldData, setOldData] = useState(null)
-  // console.log(update,"[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
+  
 
   const addressSchema = yup.object({
     name: yup.string().required('Please enter your Name'),
@@ -25,9 +25,9 @@ export default function Address({ navigation }) {
   const dispatch = useDispatch();
 
   const authData = useSelector(state => state.auth)
-  // console.log(authData, "111111111111111111111111111111111111");
-  // console.log(authData.user, "222222222222222222222222222222222");
-  // console.log(authData.user.uid, "000000000111111111111111111111111111111111111");
+  
+  
+  
 
   const handleDelete = (data) => {
     console.log(data);
@@ -69,7 +69,7 @@ export default function Address({ navigation }) {
 
   const { handleChange, handleBlur, handleSubmit, errors, touched, values, setValues } = formik
   
-  // console.log(errors);
+  
 
   return (
     <ScrollView>

@@ -16,10 +16,10 @@ export default function Product({ navigation }) {
     dispatch(getProductData())
   }, [])
   const categorySel = useSelector(state => state.category);
-  // console.log("selector dataaaaaaaaaaaaaaaa", categorySel);
+  
 
   const productSel = useSelector(state => state.product)
-  // console.log("selectorrrrrrrrrrrrrrr",productSel);
+  
 
   const tempArr = [...productSel.product]
 

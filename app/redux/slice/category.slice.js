@@ -28,7 +28,7 @@ export const getCategoryData = createAsyncThunk(
                         })
                     });
                 });
-            // console.log(data, "oooooooooooooooooooooooooooooooooooo");
+            
             return data;
         } catch (error) {
             return error;
@@ -180,7 +180,7 @@ const categorySlice = createSlice({
     extraReducers: (builder) => {
         // builder.addCase(getCategoryData.pending,handleLoading)
         builder.addCase(getCategoryData.fulfilled, (state, action) => {
-            // console.log(action, "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+            
             state.category = action.payload
             state.isLoading = false
             state.error = null

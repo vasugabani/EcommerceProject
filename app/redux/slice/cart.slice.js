@@ -11,7 +11,7 @@ const cartSlice= createSlice({
     initialState:initialState,
     reducers:{
         addToCart : (state, action) => {
-            // console.log(action.payload,"action payloaddddddddddddddddd");
+            
 
             const itemAvaible = state.cart.findIndex((v)=>v.id === action.payload)
             console.log(itemAvaible,"0000000000000000000000000000");
@@ -22,7 +22,7 @@ const cartSlice= createSlice({
                 state.cart[itemAvaible].qty++
             }
 
-            // console.log(state.cart,"11111111111111111111111111");
+            
         },
         incrementCart:(state,action) => {
             console.log(action.payload,"222222222222222222222222");

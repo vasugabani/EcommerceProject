@@ -22,9 +22,9 @@ const favouriteSlice = createSlice({
                 state.favourite.splice(favIndex, 1)
             }
 
-            // console.log(favIndex, "222222222222222222");
-            // console.log(state.favourite);
-            // console.log(action.payload,"11111111111111111111");
+            
+            
+            
         }
     }
 })

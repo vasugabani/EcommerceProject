@@ -49,50 +49,7 @@ export default function Categories({ navigation }) {
             )
           })
         }
-        {/* <CategoryButton
-          title='Tops'
-          onPress={() => navigation.navigate('ProductList')}
-        />
-        <CategoryButton
-          title='Shirts & Blouses'
-          onPress={() => console.log('shirt & blouses')}
-        />
-        <CategoryButton
-          title='Cardigans & Sweaters'
-          onPress={() => console.log('Cardigans & Sweaters')}
-        />
-        <CategoryButton
-          title='Knitwear'
-          onPress={() => console.log('Knitwear')}
-        />
-        <CategoryButton
-          title='Blazers'
-          onPress={() => console.log('Blazers')}
-        />
-        <CategoryButton
-          title='Outerwear'
-          onPress={() => console.log('Outerwear')}
-        />
-        <CategoryButton
-          title='Pants'
-          onPress={() => console.log('Pants')}
-        />
-        <CategoryButton
-          title='Jeans'
-          onPress={() => console.log('Jeans')}
-        />
-        <CategoryButton
-          title='Shorts'
-          onPress={() => console.log('Shorts')}
-        />
-        <CategoryButton
-          title='Skirts'
-          onPress={() => console.log('Skirts')}
-        />
-        <CategoryButton
-          title='Dresses'
-          onPress={() => console.log('Dresses')}
-        /> */}
+        
       </ScrollView>
     </View>
   )

@@ -185,7 +185,7 @@ export const addAddress = createAsyncThunk(
                 }
             });
 
-        // console.log("uddddddddddddddddddddd", userData);
+        
         return { ...userData, uid: data.uid };
     }
 
@@ -224,7 +224,7 @@ export const deleteAddress = createAsyncThunk(
                 }
             });
 
-        // console.log("uddddddddddddddddddddd", userData);
+        
         return { ...userData, uid: data.uid };
 
     }
@@ -284,9 +284,13 @@ export const addUserInfo = createAsyncThunk(
     'auth/addUserInfo',
     async (data) => {
         console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", data);
-        // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", data.image.path);
-
-        let tempArr = data.values.image.path.split('/')
+        
+        if(typeof data.imageURL === 'string'){
+            console.log("okkkkkkkkkkkkkkkkk");
+            const imgref =await storage().ref('users/' + data.imagename);
+            await imgref.delete();
+        }
+        let tempArr = data.image.path.split('/')
         let imageName = tempArr[tempArr.length - 1]
         console.log(imageName);
 
@@ -294,13 +298,13 @@ export const addUserInfo = createAsyncThunk(
 
         const imgFinalName = rNo + "_" + imageName;
         console.log(imgFinalName);
+        const imgRefPath = 'users/' + imgFinalName
+        const imgRef =await storage().ref('users/' + imgFinalName);
 
-        const imgRef = storage().ref('users/' + imgFinalName);
-
-        const task = await imgRef.putFile(data.values.image.path);
+        const task = await imgRef.putFile(data.image.path);
         console.log(task);
 
-        const imgRefPath = 'users/' + imgFinalName
+     
         const url = await storage().ref(imgRefPath).getDownloadURL();
         console.log(url,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
@@ -308,7 +312,7 @@ export const addUserInfo = createAsyncThunk(
         .collection('users')
         .doc(data.uid)
         .update({
-            MobileNumber: data.values.number,
+            MobileNumber: data.number,
             imagename:imgFinalName,
             imageURL:url
         })
@@ -316,7 +320,24 @@ export const addUserInfo = createAsyncThunk(
             console.log('User updated!');
         });
 
-    return data;
+        let userData;
+
+        await firestore()
+            .collection('users')
+            .doc(data.uid)
+            .get()
+            .then(documentSnapshot => {
+                console.log('User exists: ', documentSnapshot.exists);
+
+                if (documentSnapshot.exists) {
+                    console.log('User data: ', documentSnapshot.data());
+                    userData = documentSnapshot.data()
+                }
+            });
+
+        
+            return { ...userData, uid: data.uid };
+
     }
 )
 
@@ -326,30 +347,34 @@ const authSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(loginEmailPass.fulfilled, (state, action) => {
-            // console.log("888888888888888", action);
+            
 
             state.user = action.payload;
         })
         builder.addCase(signinGoogle.fulfilled, (state, action) => {
-            // console.log("aaaaaaaaaaaaaaaaaaaaaaaa", action);
+            
 
             state.user = action.payload;
         })
         builder.addCase(signinFacebook.fulfilled, (state, action) => {
-            // console.log("aaaaaaaaaaaaaaaaaaaaaaaa", action);
+            
 
             state.user = action.payload;
         })
         builder.addCase(addAddress.fulfilled, (state, action) => {
-            // console.log("fffffffffffffffffffff11", action.payload);
+            
             state.user = action.payload
         })
         builder.addCase(deleteAddress.fulfilled, (state, action) => {
-            // console.log("fffffffffffffffffffff11", action.payload);
+            
             state.user = action.payload
         })
         builder.addCase(updateAddress.fulfilled, (state, action) => {
-            console.log("fffffffffffffffffffff11", action.payload);
+            
+            state.user = action.payload
+        })
+        builder.addCase(addUserInfo.fulfilled, (state, action) => {
+            
             state.user = action.payload
         })
     }

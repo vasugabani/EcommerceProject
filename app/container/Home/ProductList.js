@@ -19,18 +19,18 @@ export default function ProductList({ navigation }) {
   const [category, setCategory] = useState('')
   // const [disible, setdisible] = useState('')
   console.log(category, "111111111111111111111111111111111111111111");
-  // console.log(search);
+  
   // let arr = [];
 
   const route = useRoute()
   const subid = route.params?.id
-  // console.log(id);
+  
 
   const category_id = route.params?.category_id
-  // console.log(category_id);
+  
 
   const cID = route.params?.categoryID
-  // console.log();
+  
 
   const pID=route.params?.pid
 
@@ -60,7 +60,7 @@ export default function ProductList({ navigation }) {
     let fData;
     let  sData=[...productSel.product]
 
-    // console.log(category,"cccccccccccccccccccccccccccccc");
+    
 
     if (category == 'all') {
       fData = productSel.product.filter((v) => v.category == category_id)
@@ -110,7 +110,7 @@ export default function ProductList({ navigation }) {
   const filterData = subCatData.subCatData.filter((v) => v.category === category_id)
   console.log(filterData, "22222222222222222222222222222222222222222");
   // const a = subCatData.subCatData.filter((v) => v.category === id);
-  // console.log("aaaaaaaaaaaa", a, id, subCatData.subCatData);
+  
 
   return (
     <View>
@@ -197,7 +197,7 @@ export default function ProductList({ navigation }) {
 
           {
             finalData.map((v) => {
-              // console.log("vvvvvvvvvvvvvvvvvvvvv", v);
+              
               return (
                 <ProductCard
                   key={v.id}

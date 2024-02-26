@@ -25,7 +25,7 @@ export const getProductData = createAsyncThunk(
                         })
                     });
                 });
-            // console.log(data, "oooooooooooooooooooooooooooooooooooo");
+            
             return data;
         } catch (error) {
             return error;

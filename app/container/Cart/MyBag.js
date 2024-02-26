@@ -30,7 +30,7 @@ export default function MyBag({ navigation }) {
   }
 
   const handleIncrement = (data) => {
-    // console.log(data,"7777777777777777777777777777777");
+    
     dispatch(incrementCart(data))
     
   }

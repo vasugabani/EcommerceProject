@@ -15,7 +15,7 @@ export default function UserInfo({ navigation }) {
     const [modal, setmodel] = useState(false)
 
     const authData = useSelector(state => state.auth)
-    console.log(authData.user, "==============================");
+    console.log(authData, "==============================");
 
     const handleToggle = () => {
         setmodel(true)
@@ -56,14 +56,15 @@ export default function UserInfo({ navigation }) {
             number:'',
         },
         validationSchema:userSchema,
-        onSubmit:(values)=>{
+        onSubmit:(values,{resetForm})=>{
             console.log(values);
 
-            dispatch(addUserInfo({values,uid:authData.user.uid}))
+            dispatch(addUserInfo({...authData.user,...values,uid:authData.user.uid}))
+            resetForm()
         }
     });
 
-    const {handleChange,handleBlur,handleSubmit,touched,errors,setFieldValue}=formik
+    const {handleChange,handleBlur,handleSubmit,touched,errors,setFieldValue,values}=formik
  
     return (
         <View>
@@ -112,6 +113,7 @@ export default function UserInfo({ navigation }) {
                 onChangeText={handleChange('number')}
                 onBlur={handleBlur('number')}
                 placeholder='enter mobile number'
+                value={values.number}
                 style={{borderWidth:1, paddingHorizontal:20,marginHorizontal:40,marginTop:20,fontWeight:'bold',color:'black',borderRadius:5}}
             />
             {touched.number && errors.number ? <Text>{errors.number}</Text> : null}

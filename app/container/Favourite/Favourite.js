@@ -11,14 +11,14 @@ export default function Favourite({ navigation }) {
   const dispatch = useDispatch()
 
   const favData = useSelector(state => state.favourite)
-  // console.log(favData, "33333333333333333");
+  
   const productData = useSelector(state => state.product)
 
   const favouriteData = favData.favourite.map((f) => {
-    // console.log(f, "444444444444444");
+    
     const productObj = productData.product.find((p) => p.id === f)
     return { ...productObj }
-    // console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",productObj);  
+    
   })
 
   const handleDelete = (id) => {
@@ -30,7 +30,7 @@ export default function Favourite({ navigation }) {
     dispatch(addToCart(id))
   }
 
-  // console.log(favData,"1111111111111",productData);
+  
   return (
     <ScrollView style={{ marginBottom: verticalScale(4) }}>
       <Text style={{ fontWeight: 'bold', fontSize: 32, marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>Favourite</Text>
