@@ -2,7 +2,7 @@ import { View, Text,TouchableOpacity } from 'react-native'
 import React from 'react'
 import { horizontalScale, moderateScale, verticalScale } from '../constant/Metrices'
 
-export default function Orderinput({ordernumber,date,TNumber,Quantity,Amount}) {
+export default function Orderinput({ordernumber,date,TNumber,Quantity,Amount,status}) {
   return (
     <View>
      <View style={{width:'95%',height:verticalScale(170),padding:15,marginTop:verticalScale(20),backgroundColor:'white',marginLeft:horizontalScale(10),borderRadius:moderateScale(10),shadowOpacity: 1,shadowRadius:20,elevation:4,}}>
@@ -19,7 +19,7 @@ export default function Orderinput({ordernumber,date,TNumber,Quantity,Amount}) {
         <TouchableOpacity style={{width:horizontalScale(100),height:verticalScale(45),borderWidth:1,borderRadius:25,shadowOpacity: 0.25,shadowRadius: 30, elevation:4,backgroundColor:'white',padding:10,marginTop:5}}>
             <Text style={{fontSize:moderateScale(16),color:'black',alignSelf:'center'}}>Details</Text>
         </TouchableOpacity>
-        <Text style={{color:'green',fontSize:moderateScale(18),marginLeft:horizontalScale(150),marginTop:verticalScale(15)}}>Delivered</Text>
+        <Text style={{color:'green',fontSize:moderateScale(18),marginLeft:horizontalScale(150),marginTop:verticalScale(15)}}>{status}</Text>
         </View>
         
       </View>

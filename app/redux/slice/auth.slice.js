@@ -341,6 +341,8 @@ export const addUserInfo = createAsyncThunk(
     }
 )
 
+
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: initialState,

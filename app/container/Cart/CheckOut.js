@@ -1,19 +1,36 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RadioButton } from 'react-native-paper';
+import { addOrderData } from '../../redux/slice/order.slice';
+import { useRoute } from '@react-navigation/native';
 
 export default function CheckOut({ navigation }) {
 
     const [selectValue, setSelectedValue] = useState(null)
 
+    const dispatch = useDispatch()
+
+    const route = useRoute()
+    const total = route.params?.total
+    const pData = route.params?.pData
+    // console.log(pData, "llllllllllllllllllllllll");
+
+    const authData = useSelector(state => state.auth)
+    // console.log("okkkkkkkkkkkkkkkkkkkk", authData.user);
+    
+    const uid=authData.user.uid
+    // console.log(uid,"uuuuuuiiiiiiiiiiiddddddddd");
+
+    const oid = Math.floor(Math.random()*1000000)
+
     const handleRadio = (data) => {
-        console.log(data,"radioooooooooooooooooooooo");
+        console.log(data, "radioooooooooooooooooooooo");
+        dispatch(addOrderData({...data,uid: uid,pData : pData,total, orderId : oid}))
         setSelectedValue(data);
     }
 
-    const authData = useSelector(state => state.auth)
-    console.log("okkkkkkkkkkkkkkkkkkkk", authData);
+    
 
     const goBack = () => {
         navigation.navigate('Address', {
@@ -22,6 +39,11 @@ export default function CheckOut({ navigation }) {
     }
     return (
         <View>
+            <RadioButton.Group 
+            onValueChange={(value)=>setSelectedValue(value)}
+            value={selectValue}>
+                
+            </RadioButton.Group>
             <ScrollView>
                 {
                     authData.user.address.map((v, i) => {
@@ -32,7 +54,8 @@ export default function CheckOut({ navigation }) {
                                     <RadioButton
                                         value={i}
                                         status={selectValue === i ? 'checked' : 'unchecked'}
-                                        onPress={() => handleRadio(i)}
+                                        onPress={() => handleRadio({i,v})}
+                                        color='black'
                                     />
                                     <Text>Address {i + 1}</Text></View>
 
@@ -60,7 +83,7 @@ export default function CheckOut({ navigation }) {
                     <Text style={{ color: 'white', fontWeight: 'bold', alignSelf: 'center' }}>Add Address</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={()=>navigation.navigate('Success')} style={{
+                <TouchableOpacity onPress={() => navigation.navigate('Success')} style={{
                     borderRadius: 20,
                     width: 100,
                     padding: 10,
@@ -68,7 +91,7 @@ export default function CheckOut({ navigation }) {
                     backgroundColor: 'black',
                     marginTop: 15,
                     alignSelf: 'center',
-                    marginBottom:10
+                    marginBottom: 10
                 }}>
                     <Text style={{ color: 'white', fontWeight: 'bold', alignSelf: 'center' }}>Next</Text>
                 </TouchableOpacity>

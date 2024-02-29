@@ -13,20 +13,26 @@ export default function MyBag({ navigation }) {
 
   const product = useSelector(state => state.product)
   const cart = useSelector(state => state.cart)
+  // console.log(cart.cart,"::::::::::::::::::::::::::::::::");
 
   const allData = cart.cart.map((c) => {
     const productObj = product.product.find((p) => p.id == c.id)
-
-    return { ...productObj, qty: c.qty }
+    
+    return { ...productObj, qty: c.qty, }
   });
 
-   
+  const priceData = allData.map((p)=>{
+    console.log(p,"qqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+    const cdata=cart.cart.find((c)=>c.id === p.id)
+
+    return {...cdata, price : p.price}
+  })
+  console.log(priceData,"jjjjjjjjjjjjjjjjjjjjjjj");
+
   const totalAmount = allData.reduce((acc, v, i) => acc + (v.price*v.qty) ,0)
 
-  console.log(allData, "111111111111111111111111111111111");
-
   const HandleAction = () => {
-    navigation.navigate('CheckOut')
+    navigation.navigate('CheckOut',{total:totalAmount,pData:priceData})
   }
 
   const handleIncrement = (data) => {

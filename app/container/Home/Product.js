@@ -27,10 +27,10 @@ export default function Product({ navigation }) {
     return new Date(b.createdAt) - new Date(a.createdAt)
   })
     .slice(0, 5);
-  console.log(sortedArr, "4444444444444444444444444444444444");
+  // console.log(sortedArr, "4444444444444444444444444444444444");
 
   const saleData = productSel.product.filter((v) => v.discount >= 30)
-  console.log(saleData, "222222222222222222222222222222222");
+  // console.log(saleData, "222222222222222222222222222222222");
 
   const handleCheck = () => {
     categorySel.category.map((v)=>{
@@ -164,7 +164,7 @@ export default function Product({ navigation }) {
         <View style={style.mainDiv}>
           {
             categorySel.category.map((v, i) => {
-              console.log(v,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555");
+              // console.log(v,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555");
               return (
                 <TouchableOpacity onPress={() => navigation.navigate('Categories',{id:v.id})} style={style[`category${i % 3 + 1}`]}>
                   <Image
