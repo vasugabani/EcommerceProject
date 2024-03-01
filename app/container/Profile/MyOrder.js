@@ -8,7 +8,7 @@ import { getOrderData } from '../../redux/slice/order.slice';
 
 export default function MyOrder({ navigation }) {
   const orderData = useSelector(state => state.order)
-  console.log(orderData, "lllllllllllllllllllllllll");
+  // console.log(orderData, "lllllllllllllllllllllllll");
 
   const authData = useSelector(state => state.auth)
   // console.log(authData,"aaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -38,19 +38,19 @@ export default function MyOrder({ navigation }) {
 
             console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvv", v);
 
-            return v.items.map((items) => {
-              console.log(items);
-              return (
-                <Orderinput
+            const totalQuantity = v.items.reduce((acc, item) => acc + item.qty, 0);
+            console.log(totalQuantity,"tttttttttttttttttttttttttttt");
+            return(
+            <Orderinput
                   ordernumber={v.orderId}
                   date={v.orderDate}
-                  TNumber={items.id}
-                  Quantity={items.qty}
-                  Amount={items.price * items.qty}
+                  // TNumber="jjjj"
+                  Quantity={totalQuantity}
+                  Amount={v.totalAmount}
                   status={v.status}
+                  onPress={()=>navigation.navigate('OrderDetails',{orderid:v.orderId,totalAmount:v.totalAmount})}
                 />
-              )
-            })
+            )
           })
         }
 

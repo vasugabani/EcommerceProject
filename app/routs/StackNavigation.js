@@ -19,6 +19,7 @@ import Login from '../container/Login';
 import Password from '../container/Password';
 import UserInfo from '../container/Profile/UserInfo';
 import CheckOut from '../container/Cart/CheckOut';
+import OrderDetails from '../container/Cart/OrderDetails';
 
 // export default function StackNavigation({ navigation }) {
 
@@ -211,6 +212,21 @@ import CheckOut from '../container/Cart/CheckOut';
         options={{
           headerShown:false
         }}/>
+
+<Stack.Screen name='OrderDetails' component={OrderDetails}
+          options={{
+            headerTitleAlign: 'center',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <CustomButton
+                icon='chevron-left'
+                onClick={() => {
+                  navigation.goBack();
+                }}
+              />
+            ),
+          }}
+        />
       </Stack.Navigator>
     )
   }
