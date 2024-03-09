@@ -3,8 +3,10 @@ import React from 'react'
 import Profileinput from '../../component/Profileinput'
 import { verticalScale } from '../../constant/Metrices'
 import Address from '../Cart/Address'
+import { useSelector } from 'react-redux'
 
 export default function MyProfile({ navigation }) {
+  const authData = useSelector(state => state.auth)
   return (
 
     <View style={{ marginTop: verticalScale(15) }}>
@@ -14,7 +16,7 @@ export default function MyProfile({ navigation }) {
         <TouchableOpacity onPress={() => navigation.navigate('UserInfo')}>
           <View style={{ width: 80, height: 80, backgroundColor: 'black', borderRadius: 100 }}>
             <Image
-              source={require('../../../assets/image/Profile.jpg')}
+              source={{uri:authData.user.imageURL}}
               style={{ width: '100%', height: '100%', borderRadius: 100 }}
             />
           </View>
@@ -54,7 +56,7 @@ export default function MyProfile({ navigation }) {
       />
 
       <Profileinput
-        name="Settings"
+        name="LogOut"
         titel="Notifications"
       />
     </View>

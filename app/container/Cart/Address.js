@@ -25,7 +25,7 @@ export default function Address({ navigation,route }) {
   const dispatch = useDispatch();
 
   const authData = useSelector(state => state.auth)
-  
+  console.log(authData,"222222222222222222222222222222222222222");
   
   
 

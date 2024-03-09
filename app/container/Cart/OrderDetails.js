@@ -53,34 +53,14 @@ export default function OrderDetails({navigation}) {
               <Text style={{fontSize:18,fontWeight:'bold',color:'black'}}>Shipping Address</Text>
 
               <View style={{flexDirection:'row',marginBottom:2,marginTop:5}}> 
-              <Text style={{fontSize:16,fontWeight:'bold',}}>Name  :  </Text>
-              <Text>{v.address.name}</Text>
+              <Text style={{fontSize:16,fontWeight:'bold'}}>{v.address.name}</Text>
               </View>
 
               <View style={{flexDirection:'row',margin:2}}> 
-              <Text style={{fontSize:16,fontWeight:'bold',}}>Address  :  </Text>
-              <Text>{v.address.address}</Text>
-              </View>
-
-              <View style={{flexDirection:'row',margin:2}}> 
-              <Text style={{fontSize:16,fontWeight:'bold',}}>City  :  </Text>
-              <Text>{v.address.city}</Text>
-              </View>
-
-              <View style={{flexDirection:'row',margin:2}}> 
-              <Text style={{fontSize:16,fontWeight:'bold',}}>State  :  </Text>
-              <Text>{v.address.state}</Text>
-              </View>
               
-              <View style={{flexDirection:'row',margin:2}}> 
-              <Text style={{fontSize:16,fontWeight:'bold',}}>Country  :  </Text>
-              <Text>{v.address.country}</Text>
+              <Text>{v.address.address}</Text><Text>,{v.address.city}</Text><Text>- {v.address.pincode}</Text><Text>,{v.address.state}</Text><Text>,{v.address.country}</Text>
               </View>
 
-              <View style={{flexDirection:'row',margin:2}}> 
-              <Text style={{fontSize:16,fontWeight:'bold',}}>PinCode  :  </Text>
-              <Text>{v.address.pincode}</Text>
-              </View>
             </View>
           )
         })

@@ -73,7 +73,7 @@ export default function UserInfo({ navigation }) {
 
             <View style={{ width: 150, height: 150, backgroundColor: 'black', borderRadius: 100, alignSelf: 'center', marginTop: 20, position: 'relative' }}>
                 <Image
-                    source={require('../../../assets/image/Profile.jpg')}
+                    source={{uri:authData.user.imageURL}}
                     style={{ width: '100%', height: '100%', borderRadius: 100 }}
                 />
                 <TouchableOpacity onPress={handleToggle}>
@@ -137,7 +137,7 @@ const style = StyleSheet.create({
         borderRadius: 20,
         bottom: 10,
         right: 0,
-        color: 'green',
+        color: 'black',
         backgroundColor: 'white',
         width: 40,
         textAlign: 'center'
