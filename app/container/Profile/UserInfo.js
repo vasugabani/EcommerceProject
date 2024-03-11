@@ -13,6 +13,11 @@ export default function UserInfo({ navigation }) {
     const dispatch=useDispatch()
 
     const [modal, setmodel] = useState(false)
+    const [profile,setProfile] =useState(false)
+
+    const handleProfileImg = () => {
+        setProfile(true)
+    }
 
     const authData = useSelector(state => state.auth)
     console.log(authData, "==============================");
@@ -23,6 +28,7 @@ export default function UserInfo({ navigation }) {
 
     const handlecross = () => {
         setmodel(false)
+        setProfile(false)
     }
 
     const handleGallery = () => {
@@ -72,13 +78,33 @@ export default function UserInfo({ navigation }) {
                 <MaterialIcons style={style.icon} name="keyboard-arrow-left" color={'black'} size={34} /></TouchableOpacity>
 
             <View style={{ width: 150, height: 150, backgroundColor: 'black', borderRadius: 100, alignSelf: 'center', marginTop: 20, position: 'relative' }}>
+                <TouchableOpacity onPress={()=>handleProfileImg()}>
                 <Image
                     source={{uri:authData.user.imageURL}}
                     style={{ width: '100%', height: '100%', borderRadius: 100 }}
                 />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={handleToggle}>
                     <MaterialIcons style={style.camera} name="camera-alt" color={'black'} size={34} /></TouchableOpacity>
             </View>
+
+            <Modal
+            
+                animationType="slide"
+                transparent={true}
+                visible={profile}
+            >
+                <View style={{ backgroundColor: 'white', width: '100%', alignSelf: 'center', height: 800, borderRadius: 10, marginTop: verticalScale(0) }}>
+                    <TouchableOpacity onPress={handlecross} style={{ marginLeft: horizontalScale(150) }}>
+                        <MaterialCommunityIcons name='minus-thick' size={50} color={'black'} />
+                    </TouchableOpacity>
+                    <Image
+                    source={{uri:authData.user.imageURL}}
+                    style={{ width: 450, height: 500,marginTop:100,alignSelf:'center'  }}
+                />
+
+                </View>
+            </Modal>
 
             <Modal
                 animationType="slide"

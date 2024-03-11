@@ -1,12 +1,24 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Button } from 'react-native'
 import React from 'react'
 import Profileinput from '../../component/Profileinput'
 import { verticalScale } from '../../constant/Metrices'
 import Address from '../Cart/Address'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import auth from '@react-native-firebase/auth';
+import { firebase } from '@react-native-firebase/firestore'
+import SignUp from '../SignUp'
+import { logOut } from '../../redux/slice/auth.slice'
 
 export default function MyProfile({ navigation }) {
   const authData = useSelector(state => state.auth)
+  const dispatch=useDispatch()
+
+  const handleLogOut = () => {
+    console.log("okkkkkkkkkkkkkkk");
+
+    dispatch(logOut(authData.user.email))
+      
+  }
   return (
 
     <View style={{ marginTop: verticalScale(15) }}>
@@ -58,7 +70,10 @@ export default function MyProfile({ navigation }) {
       <Profileinput
         name="LogOut"
         titel="Notifications"
+        onPress={()=>handleLogOut()}
       />
+
+      
     </View>
   )
 }
