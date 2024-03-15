@@ -22,12 +22,12 @@ export default function MyBag({ navigation }) {
   });
 
   const priceData = allData.map((p)=>{
-    console.log(p,"qqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+    // console.log(p,"qqqqqqqqqqqqqqqqqqqqqqqqqqqq");
     const cdata=cart.cart.find((c)=>c.id === p.id)
 
     return {...cdata, price : p.price}
   })
-  console.log(priceData,"jjjjjjjjjjjjjjjjjjjjjjj");
+  // console.log(priceData,"jjjjjjjjjjjjjjjjjjjjjjj");
 
   const totalAmount = allData.reduce((acc, v, i) => acc + (v.price*v.qty) ,0)
 

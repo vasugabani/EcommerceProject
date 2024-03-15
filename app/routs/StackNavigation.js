@@ -20,6 +20,7 @@ import Password from '../container/Password';
 import UserInfo from '../container/Profile/UserInfo';
 import CheckOut from '../container/Cart/CheckOut';
 import OrderDetails from '../container/Cart/OrderDetails';
+import SplashScreen from '../container/SplashScreen';
 
 // export default function StackNavigation({ navigation }) {
 
@@ -225,6 +226,13 @@ import OrderDetails from '../container/Cart/OrderDetails';
                 }}
               />
             ),
+          }}
+        />
+
+<Stack.Screen name='SplashScreen' component={SplashScreen}
+          options={{
+            
+            headerBackVisible: false,
           }}
         />
       </Stack.Navigator>

@@ -11,7 +11,7 @@ export const getOrderData = createAsyncThunk(
     'getOrderData',
     async (data) => {
         console.log(data,"gggggggggggggggggggggg");
-        let orderData;
+        let userData;;
         await firestore()
             .collection('order')
             .doc(data.id)
@@ -21,10 +21,10 @@ export const getOrderData = createAsyncThunk(
 
                 if (documentSnapshot.exists) {
                     console.log('User data: ', documentSnapshot.data());
-                    orderData = documentSnapshot.data()
+                    userData = documentSnapshot.data()
                 }
             });
-        return { ...orderData, uid: data.id };
+        return { ...userData, uid: data.id };
     }
 )
 

@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AppInput from '../../component/InputBox/AppInput'
 import AppButton from '../../component/Button/AppButton'
 import { verticalScale } from '../../constant/Metrices'
@@ -7,11 +7,13 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux'
 import { addAddress, deleteAddress, updateAddress } from '../../redux/slice/auth.slice'
-export default function Address({ navigation,route }) {
+export default function Address({ navigation, route }) {
 
-  const [ update, setUpdate] = useState(false)
-  const [oldData, setOldData] = useState(null)
   
+
+  const [update, setUpdate] = useState(false)
+  const [oldData, setOldData] = useState(null)
+
 
   const addressSchema = yup.object({
     name: yup.string().required('Please enter your Name'),
@@ -25,17 +27,17 @@ export default function Address({ navigation,route }) {
   const dispatch = useDispatch();
 
   const authData = useSelector(state => state.auth)
-  console.log(authData,"222222222222222222222222222222222222222");
-  
-  
+  console.log(authData, "222222222222222222222222222222222222222");
+
+
 
   const handleDelete = (data) => {
     console.log(data);
-    dispatch(deleteAddress({address: data, uid:authData.user.uid}))
+    dispatch(deleteAddress({ address: data, uid: authData.user.uid }))
   }
 
   const handleEdit = (data) => {
-    console.log(data,"eeeeeeeeeeeeeeeeeeeeeeeeee");
+    console.log(data, "eeeeeeeeeeeeeeeeeeeeeeeeee");
     setValues(data)
     setOldData(data)
     setUpdate(true)
@@ -52,20 +54,17 @@ export default function Address({ navigation,route }) {
     },
     validationSchema: addressSchema,
     onSubmit: (values, { resetForm }) => {
-      if(route.params?.previousScreen === 'CheckOut'){
+      if (route.params?.previousScreen === 'CheckOut') {
         navigation.navigate('CheckOut')
-        dispatch(addAddress({address: values, uid:authData.user.uid}))
-      }else{
-        if(update){
+        dispatch(addAddress({ address: values, uid: authData.user.uid }))
+      } else {
+        if (update) {
           console.log("user updateddddddddd");
-          dispatch(updateAddress({address:values,oldData,uid:authData.user.uid}))
-        }else{
-          dispatch(addAddress({address: values, uid:authData.user.uid}))
+          dispatch(updateAddress({ address: values, oldData, uid: authData.user.uid }))
+        } else {
+          dispatch(addAddress({ address: values, uid: authData.user.uid }))
         }
       }
-
-      
-      
       resetForm();
       setUpdate(false)
     },
@@ -73,8 +72,8 @@ export default function Address({ navigation,route }) {
 
 
   const { handleChange, handleBlur, handleSubmit, errors, touched, values, setValues } = formik
-  
-  
+
+
 
   return (
     <ScrollView>
@@ -146,7 +145,7 @@ export default function Address({ navigation,route }) {
       </View>
 
       {
-        authData.user.address.map((v,i)=>{
+        authData.user.address?.map((v,i)=>{
           console.log("=======================",v);
           return(
             <View key={i} style={{marginTop:20}}>

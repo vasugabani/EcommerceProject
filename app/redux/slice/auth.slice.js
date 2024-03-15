@@ -153,11 +153,37 @@ export const loginEmailPass = createAsyncThunk(
     }
 )
 
+export const getAddress = createAsyncThunk(
+    'auth/getAddress',
+    async () => {
+        let data;
+        try {
+            await firestore()
+                .collection('users')
+                .get()
+                .then(querySnapshot => {
+                    // console.log(querySnapshot,"qqqqqqqqqqqqqqqqqqqqqqqq");
+                    querySnapshot.forEach(documentSnapshot => {
+                        // console.log(documentSnapshot,"ddddddddddddddddddddddddddd");
+                        data=documentSnapshot.data()
+                        // console.log(data,"2222222222222222222222222222");
+                    });
+                });
+            
+            return data;
+        } catch (error) {
+            return error;
+        }
+
+    }
+
+)
+
 export const addAddress = createAsyncThunk(
     'auth/address',
 
     async (data) => {
-        console.log(data, "55555555555555555555555555555555555");
+        // console.log(data, "55555555555555555555555555555555555");
 
 
         await firestore()
@@ -185,7 +211,7 @@ export const addAddress = createAsyncThunk(
                 }
             });
 
-        
+
         return { ...userData, uid: data.uid };
     }
 
@@ -224,7 +250,7 @@ export const deleteAddress = createAsyncThunk(
                 }
             });
 
-        
+
         return { ...userData, uid: data.uid };
 
     }
@@ -283,11 +309,11 @@ export const updateAddress = createAsyncThunk(
 export const addUserInfo = createAsyncThunk(
     'auth/addUserInfo',
     async (data) => {
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", data);
-        
-        if(typeof data.imageURL === 'string'){
-            console.log("okkkkkkkkkkkkkkkkk");
-            const imgref =await storage().ref('users/' + data.imagename);
+        // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", data);
+
+        if (typeof data.imageURL === 'string') {
+            // console.log("okkkkkkkkkkkkkkkkk");
+            const imgref = await storage().ref('users/' + data.imagename);
             await imgref.delete();
         }
         let tempArr = data.image.path.split('/')
@@ -299,26 +325,26 @@ export const addUserInfo = createAsyncThunk(
         const imgFinalName = rNo + "_" + imageName;
         console.log(imgFinalName);
         const imgRefPath = 'users/' + imgFinalName
-        const imgRef =await storage().ref('users/' + imgFinalName);
+        const imgRef = await storage().ref('users/' + imgFinalName);
 
         const task = await imgRef.putFile(data.image.path);
         console.log(task);
 
-     
+
         const url = await storage().ref(imgRefPath).getDownloadURL();
-        console.log(url,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        // console.log(url, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
         await firestore()
-        .collection('users')
-        .doc(data.uid)
-        .update({
-            MobileNumber: data.number,
-            imagename:imgFinalName,
-            imageURL:url
-        })
-        .then(() => {
-            console.log('User updated!');
-        });
+            .collection('users')
+            .doc(data.uid)
+            .update({
+                MobileNumber: data.number,
+                imagename: imgFinalName,
+                imageURL: url
+            })
+            .then(() => {
+                console.log('User updated!');
+            });
 
         let userData;
 
@@ -335,8 +361,8 @@ export const addUserInfo = createAsyncThunk(
                 }
             });
 
-        
-            return { ...userData, uid: data.uid };
+
+        return { ...userData, uid: data.uid };
 
     }
 )
@@ -349,34 +375,38 @@ const authSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(loginEmailPass.fulfilled, (state, action) => {
-            
+
 
             state.user = action.payload;
         })
         builder.addCase(signinGoogle.fulfilled, (state, action) => {
-            
+
 
             state.user = action.payload;
         })
         builder.addCase(signinFacebook.fulfilled, (state, action) => {
-            
+
 
             state.user = action.payload;
         })
         builder.addCase(addAddress.fulfilled, (state, action) => {
-            
+
             state.user = action.payload
         })
         builder.addCase(deleteAddress.fulfilled, (state, action) => {
-            
+
             state.user = action.payload
         })
         builder.addCase(updateAddress.fulfilled, (state, action) => {
-            
+
             state.user = action.payload
         })
         builder.addCase(addUserInfo.fulfilled, (state, action) => {
-            
+
+            state.user = action.payload
+        })
+        builder.addCase(getAddress.fulfilled, (state, action) => {
+            // console.log(action.payload, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             state.user = action.payload
         })
     }
