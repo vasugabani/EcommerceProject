@@ -121,7 +121,7 @@ export default function Payment() {
 
     let amt = 6000 * 100
 
-    const response = await fetch('http://192.168.184.225:4242/payment-sheet', {
+    const response = await fetch('http://192.168.1.49:4242/payment-sheet', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

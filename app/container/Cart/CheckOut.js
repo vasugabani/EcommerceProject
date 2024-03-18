@@ -21,18 +21,18 @@ export default function CheckOut({ navigation }) {
     const route = useRoute()
     const total = route.params?.total
     const pData = route.params?.pData
-    // console.log(pData, "llllllllllllllllllllllll");
+    console.log(pData, "llllllllllllllllllllllll");
 
     const authData = useSelector(state => state.auth)
-    // console.log("okkkkkkkkkkkkkkkkkkkk", authData.user.address);
+    console.log("okkkkkkkkkkkkkkkkkkkk", authData.user);
 
     const uid = authData.user.uid
-    // console.log(uid,"uuuuuuiiiiiiiiiiiddddddddd");
+    console.log(uid,"uuuuuuiiiiiiiiiiiddddddddd");
 
     const oid = Math.floor(Math.random() * 1000000)
 
     const handleRadio = (data) => {
-        // console.log(data, "radioooooooooooooooooooooo");
+        console.log(data, "radioooooooooooooooooooooo");
         dispatch(addOrderData({ ...data, uid: uid, pData: pData, total, orderId: oid }))
         setSelectedValue(data);
     }
@@ -58,7 +58,7 @@ export default function CheckOut({ navigation }) {
                 <ScrollView>
                     {
                         authData.user.address?.map((v, i) => {
-                            // console.log(v,"vvvvvvvvvvvvvvvvvv");
+                            console.log(v,"vvvvvvvvvvvvvvvvvv");
                             return (
                                 <View key={i} style={{ marginTop: 20, borderWidth: 1, borderRadius: 10, padding: 20, marginHorizontal: 10 }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -104,7 +104,7 @@ export default function CheckOut({ navigation }) {
                         alignSelf: 'center',
                         marginBottom: 10
                     }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', alignSelf: 'center' }}>Next</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold', alignSelf: 'center' }}>Payment</Text>
                     </TouchableOpacity>
                 </ScrollView>
 

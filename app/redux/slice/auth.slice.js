@@ -124,7 +124,7 @@ export const loginEmailPass = createAsyncThunk(
                         });
 
 
-
+                        console.log(user.user,"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
                     return user.user;
                 } else {
                     console.log("please verify your email");
