@@ -104,7 +104,7 @@ export const loginEmailPass = createAsyncThunk(
     'auth/loginEmailPass',
 
     async (data) => {
-        console.log("000000000000000", data);
+        // console.log("000000000000000", data);
 
 
         const user = await auth()
@@ -148,7 +148,7 @@ export const loginEmailPass = createAsyncThunk(
 
                 console.error(error);
             });
-
+        console.log("qqqqqqqqqqqqqq", user);
         return user;
     }
 )
@@ -165,11 +165,11 @@ export const getAddress = createAsyncThunk(
                     // console.log(querySnapshot,"qqqqqqqqqqqqqqqqqqqqqqqq");
                     querySnapshot.forEach(documentSnapshot => {
                         // console.log(documentSnapshot,"ddddddddddddddddddddddddddd");
-                        data=documentSnapshot.data()
+                        data = documentSnapshot.data()
                         // console.log(data,"2222222222222222222222222222");
                     });
                 });
-            
+
             return data;
         } catch (error) {
             return error;
@@ -378,7 +378,7 @@ export const logOut = createAsyncThunk(
                 .signOut(data)
                 .then(() => console.log('user sign out'));
 
-                return null;
+            return null;
         } catch (error) {
             console.log(error);
         }
@@ -391,7 +391,7 @@ const authSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(loginEmailPass.fulfilled, (state, action) => {
-
+            console.log(action.payload, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
             state.user = action.payload;
         })
@@ -422,7 +422,7 @@ const authSlice = createSlice({
             state.user = action.payload
         })
         builder.addCase(getAddress.fulfilled, (state, action) => {
-            // console.log(action.payload, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
             state.user = action.payload
         })
         builder.addCase(logOut.fulfilled, (state, action) => {

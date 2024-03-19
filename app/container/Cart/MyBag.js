@@ -15,6 +15,9 @@ export default function MyBag({ navigation }) {
   const cart = useSelector(state => state.cart)
   // console.log(cart.cart,"::::::::::::::::::::::::::::::::");
 
+  const auth=useSelector(state=>state.auth)
+  console.log("1111111111111111111111111111111",auth.user.uid);
+
   const allData = cart.cart.map((c) => {
     const productObj = product.product.find((p) => p.id == c.id)
     

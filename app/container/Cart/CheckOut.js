@@ -6,6 +6,7 @@ import { addOrderData } from '../../redux/slice/order.slice';
 import { useRoute } from '@react-navigation/native';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { getAddress } from '../../redux/slice/auth.slice';
+import Payment from './Payment';
 
 
 export default function CheckOut({ navigation }) {
@@ -24,10 +25,10 @@ export default function CheckOut({ navigation }) {
     // console.log(pData, "llllllllllllllllllllllll");
 
     const authData = useSelector(state => state.auth)
-    // console.log("okkkkkkkkkkkkkkkkkkkk", authData.user.address);
+    console.log("okkkkkkkkkkkkkkkkkkkk", authData.user);
 
     const uid = authData.user.uid
-    // console.log(uid,"uuuuuuiiiiiiiiiiiddddddddd");
+    console.log(uid,"uuuuuuiiiiiiiiiiiddddddddd");
 
     const oid = Math.floor(Math.random() * 1000000)
 
@@ -104,7 +105,7 @@ export default function CheckOut({ navigation }) {
                         alignSelf: 'center',
                         marginBottom: 10
                     }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold', alignSelf: 'center' }}>Next</Text>
+                        <Payment />
                     </TouchableOpacity>
                 </ScrollView>
 
