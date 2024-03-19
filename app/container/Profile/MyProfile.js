@@ -3,10 +3,19 @@ import React from 'react'
 import Profileinput from '../../component/Profileinput'
 import { verticalScale } from '../../constant/Metrices'
 import Address from '../Cart/Address'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function MyProfile({ navigation }) {
   const authData = useSelector(state => state.auth)
+
+  const dispatch=useDispatch()
+
+  const handleLogOut = () => {
+    console.log("okkkkkkkkkkkkkkk");
+
+    // dispatch(logOut(authData.user.email))
+      
+  }
   return (
 
     <View style={{ marginTop: verticalScale(15) }}>
