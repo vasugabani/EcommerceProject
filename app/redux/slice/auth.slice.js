@@ -367,7 +367,23 @@ export const addUserInfo = createAsyncThunk(
     }
 )
 
+export const logOut = createAsyncThunk(
+    'auth/logOut',
 
+    async (data) => {
+        console.log(data, "dddddddddddddddddddddd");
+
+        try {
+            await firebase.auth()
+                .signOut(data)
+                .then(() => console.log('user sign out'));
+
+                return null;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
 
 const authSlice = createSlice({
     name: 'auth',
