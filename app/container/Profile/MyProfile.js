@@ -4,6 +4,7 @@ import Profileinput from '../../component/Profileinput'
 import { verticalScale } from '../../constant/Metrices'
 import Address from '../Cart/Address'
 import { useDispatch, useSelector } from 'react-redux'
+import { logOut } from '../../redux/slice/auth.slice'
 
 export default function MyProfile({ navigation }) {
   const authData = useSelector(state => state.auth)
@@ -13,7 +14,7 @@ export default function MyProfile({ navigation }) {
   const handleLogOut = () => {
     console.log("okkkkkkkkkkkkkkk");
 
-    // dispatch(logOut(authData.user.email))
+    dispatch(logOut(authData.user.email))
       
   }
   return (
