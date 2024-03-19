@@ -16,7 +16,7 @@ export default function MyProfile({ navigation }) {
         <TouchableOpacity onPress={() => navigation.navigate('UserInfo')}>
           <View style={{ width: 80, height: 80, backgroundColor: 'black', borderRadius: 100 }}>
             <Image
-              source={{uri:authData.user.imageURL}}
+              source={{ uri: authData.user.imageURL }}
               style={{ width: '100%', height: '100%', borderRadius: 100 }}
             />
           </View>
@@ -58,6 +58,7 @@ export default function MyProfile({ navigation }) {
       <Profileinput
         name="LogOut"
         titel="Notifications"
+        onPress={() => handleLogOut()}
       />
     </View>
   )
