@@ -425,6 +425,10 @@ const authSlice = createSlice({
             // console.log(action.payload, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             state.user = action.payload
         })
+        builder.addCase(logOut.fulfilled, (state, action) => {
+
+            state.user = action.payload
+        })
     }
 });
 
