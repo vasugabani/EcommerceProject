@@ -16,17 +16,27 @@ export default function ProductDetails({ navigation }) {
   const [model, Setmodel] = useState(false)
   const [colormodel, Setcolormodel] = useState(false)
   const [active, setActive] = useState(false)
+  const [modal, setmodal] = useState(false)
 
+  const handleOpen = () => {
+    setmodal(true)
+  }
+  const handleClose = () => {
+    setmodal(false)
+  }
   const dispatch = useDispatch()
   useEffect(() => {
-    
+
     dispatch(getProductData())
   }, [])
 
+  const reviewData = useSelector(state => state.review)
+  // console.log(reviewData.review, "rrrrrrrrrrrrrrrrrrrrrrr");
+
   const productSel = useSelector(state => state.product)
 
-  const favouriteData = useSelector(state=>state.favourite)
- 
+  const favouriteData = useSelector(state => state.favourite)
+
   const handleActive = (id) => {
     setActive(!active);
     dispatch(addToFavourite(id))
@@ -64,7 +74,7 @@ export default function ProductDetails({ navigation }) {
 
         {
           filterData.map((v, i) => {
-            
+
             return (
               <View key={i}>
                 <View style={style.imagebox}>
@@ -78,7 +88,7 @@ export default function ProductDetails({ navigation }) {
             )
           })
         }
-     </ScrollView>
+      </ScrollView>
 
       <View style={style.disbox}>
 
@@ -143,13 +153,36 @@ export default function ProductDetails({ navigation }) {
 
       <View style={{ width: '100%', height: verticalScale(50), borderWidth: 0.5, flexDirection: 'row' }}>
         <View><Text style={{ fontSize: moderateScale(20), color: 'black', marginTop: verticalScale(15), marginLeft: horizontalScale(20) }}>Shipping info</Text></View>
-        <View style={{ marginLeft: horizontalScale(240), marginTop: verticalScale(18) }}><Feather name="chevron-right" color={'black'} size={moderateScale(15)} /></View>
-
       </View>
       <View style={{ width: '100%', height: verticalScale(50), borderWidth: 0.5, flexDirection: 'row' }}>
         <View><Text style={{ fontSize: moderateScale(20), color: 'black', marginTop: verticalScale(15), marginLeft: horizontalScale(20) }}>Support</Text></View>
-        <View style={{ marginLeft: horizontalScale(280), marginTop: verticalScale(18) }}><Feather name="chevron-right" color={'black'} size={moderateScale(15)} /></View>
+
       </View>
+          
+      <View style={{ width: '100%', height: verticalScale(50), borderWidth: 0.5, flexDirection: 'row' }}>
+        <View><Text style={{ fontSize: moderateScale(20), color: 'black', marginTop: verticalScale(15), marginLeft: horizontalScale(20) }}>Review</Text></View>
+        <View style={{ marginLeft: 300, marginTop: 15 }}>
+          <TouchableOpacity onPress={() => handleOpen()}><Feather name="chevron-down" color='black' size={moderateScale(20)} /></TouchableOpacity></View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modal}
+        >
+          <View style={{ width: '100%', marginTop: verticalScale(510), backgroundColor: 'white' }}>
+            <TouchableOpacity onPress={() => handleClose()} style={{ marginLeft: horizontalScale(150)}}>
+              <MaterialCommunityIcons name='minus-thick' size={50} color={'black'} />
+            </TouchableOpacity>
+            <ScrollView style={{ height: 180 }}>
+              {
+                reviewData.review.Productid === id ? <View style={{ marginBottom: 10 }}><Text style={{ color: 'black', marginHorizontal: 15 }}>Review : <Text style={{ color: 'black', fontWeight: 'bold', }}>{reviewData.review.Reviews}</Text></Text>
+                  <Text style={{ color: 'black', marginHorizontal: 15 }}>Rating : <Text style={{ color: 'black', fontWeight: 'bold', }}>{reviewData.review.Rating} star</Text></Text></View> : null
+              }
+            </ScrollView>
+          </View>
+        </Modal>
+      </View>
+
       <Text style={{ fontSize: moderateScale(25), marginLeft: horizontalScale(20), marginTop: verticalScale(20), color: 'black', fontWeight: 'bold' }}>You can also like this</Text>
 
       <View style={{ width: '100%', height: verticalScale(330), backgroundColor: 'white', marginTop: verticalScale(10) }}>

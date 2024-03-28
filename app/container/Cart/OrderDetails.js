@@ -1,28 +1,49 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Order from '../../component/Order';
 
 export default function OrderDetails({navigation}) {
+
+  
   const orderData = useSelector(state => state.order)
-  // console.log(orderData, "lllllllllllllllllllllllll");
+  console.log(orderData.order, "lllllllllllllllllllllllll");
 
   const route = useRoute()
   const orderNo = route.params?.orderid
   const total = route.params?.totalAmount
   // console.log(total, "9999999999999999");
 
+  const navigate=useNavigation()
+
   const data = orderData.order.order.filter((v) => v.orderId === orderNo)
   console.log(data);
 
   const productData = useSelector(state => state.product)
+
+  const handleReview = (image,title,pid) => {
+     
+    // console.log(image,title,"ddddddddddddddddddddddd");
+    // Assuming there is only one order for the given order ID
+    const order = data[0];
+
+    if (order.status === 'Delievery') { // <-- Ensure the correct spelling
+      // console.log("okkkkkkkkkk");
+      navigate.navigate('Review',{image,title,pid});
+    } else if (order.status === 'pending') { // <-- Ensure the correct spelling
+      Alert.alert('Pending Order', 'You cannot review a pending order.');
+    } else if (order.status === 'Cancelled') { // <-- Ensure the correct spelling
+      Alert.alert('Cancelled Order', 'You cannot review a Cancelled order.');
+    }
+  }
 
   return (
     <View>
       {
         data.map((v) => {
           return v.items.map((items) => {
+            console.log(items.id,"iiiiiiiiiiiiiiiiiiiiiii");
             const filter = productData.product.filter((f) => f.id === items.id)
             return filter.map((va, index) => {
               return (
@@ -33,8 +54,10 @@ export default function OrderDetails({navigation}) {
                     price={items.price * items.qty}
                     Quantity={items.qty}
                     Product={va.title}
+                    onPress={()=>handleReview(va.image,va.title,items.id)}
                   />
                   </TouchableOpacity>
+                  
                 </View>
               )
             })

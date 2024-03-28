@@ -10,7 +10,7 @@ const initialState = {
 export const getOrderData = createAsyncThunk(
     'getOrderData',
     async (data) => {
-        console.log(data,"gggggggggggggggggggggg");
+        // console.log(data,"gggggggggggggggggggggg");
         let userData;;
         await firestore()
             .collection('order')
@@ -37,10 +37,11 @@ export const addOrderData = createAsyncThunk(
         console.log({
             userID: data.uid,
             items: data.pData,
-            address: data.v,
+            address: data.address.v,
             totalAmount: data.total,
             orderDate:new Date().toLocaleDateString(),
-            orderId:data.orderId
+            orderId:data.orderId,
+            customerId:data.customerID
         }, "pppppppppppppppppppppppppp");
 
         const documentSnapShot = await firestore()
@@ -48,7 +49,7 @@ export const addOrderData = createAsyncThunk(
             .doc(data.uid)
             .get()
 
-        console.log(documentSnapShot.exists, "ddddddddddddddddd");
+        // console.log(documentSnapShot.exists, "ddddddddddddddddd");
 
         if (documentSnapShot.exists) {
             await firestore()
@@ -58,11 +59,12 @@ export const addOrderData = createAsyncThunk(
                     order: firebase.firestore.FieldValue.arrayUnion({
                         userID: data.uid,
                         items: data.pData,
-                        address: data.v,
+                        address: data.address.v,
                         totalAmount: data.total,
                         status: 'pending',
                         orderDate:new Date().toLocaleDateString(),
-                        orderId:data.orderId
+                        orderId:data.orderId,
+                        customerId:data.customerID
                     })
                 })
                 .then(() => {
@@ -79,11 +81,12 @@ export const addOrderData = createAsyncThunk(
                         {
                             userID: data.uid,
                             items: data.pData,
-                            address: data.v,
+                            address: data.address.v,
                             totalAmount: data.total,
                             status: 'pending',
                             orderDate:new Date().toLocaleDateString(),
-                            orderId:data.orderId
+                            orderId:data.orderId,
+                            customerId:data.customerID
                         }
                     ]
                 })

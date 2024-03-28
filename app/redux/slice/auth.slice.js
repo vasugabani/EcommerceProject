@@ -14,7 +14,7 @@ const initialState = {
 export const signupEmailPass = createAsyncThunk(
     'auth/signupEmailPass',
     async (data) => {
-        console.log(data);
+        console.log("signupEmailPass");
 
         await auth()
             .createUserWithEmailAndPassword(data.email, data.password)
@@ -51,7 +51,7 @@ export const signupEmailPass = createAsyncThunk(
 export const signinGoogle = createAsyncThunk(
     'auth/signinGoogle',
     async () => {
-
+        console.log("signinGoogle");
         // Check if your device supports Google Play
         await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
         // Get the users ID token
@@ -72,6 +72,7 @@ export const signinGoogle = createAsyncThunk(
 export const signinFacebook = createAsyncThunk(
     'auth/signinFacebook',
     async () => {
+        console.log("signinFacebook");
         try {
             // Attempt login with permissions
             const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
@@ -104,6 +105,7 @@ export const loginEmailPass = createAsyncThunk(
     'auth/loginEmailPass',
 
     async (data) => {
+        console.log("loginEmailPass");
         // console.log("000000000000000", data);
 
 
@@ -155,22 +157,27 @@ export const loginEmailPass = createAsyncThunk(
 
 export const getAddress = createAsyncThunk(
     'auth/getAddress',
-    async () => {
-        let data;
+    async (data) => {
+        console.log("getAddress");
+        let aData;
         try {
             await firestore()
                 .collection('users')
+                .doc(data.uid)
                 .get()
-                .then(querySnapshot => {
-                    // console.log(querySnapshot,"qqqqqqqqqqqqqqqqqqqqqqqq");
-                    querySnapshot.forEach(documentSnapshot => {
-                        // console.log(documentSnapshot,"ddddddddddddddddddddddddddd");
-                        data = documentSnapshot.data()
-                        // console.log(data,"2222222222222222222222222222");
-                    });
+                .then(documentSnapshot => {
+                    console.log('User exists: ', documentSnapshot.exists);
+
+                    if (documentSnapshot.exists) {
+                        console.log('User data: ', documentSnapshot.data());
+                        aData = documentSnapshot.data()
+                    }
                 });
 
-            return data;
+            console.log("vvvvvvvvvvvvvvvvvv", aData);
+            let fData = {...aData, uid: data.uid}
+            console.log("adddddddddddddddddddddressssssssss", fData);
+            return fData;
         } catch (error) {
             return error;
         }
@@ -184,7 +191,7 @@ export const addAddress = createAsyncThunk(
 
     async (data) => {
         // console.log(data, "55555555555555555555555555555555555");
-
+        console.log("addAddress");
 
         await firestore()
             .collection('users')
@@ -220,7 +227,7 @@ export const addAddress = createAsyncThunk(
 export const deleteAddress = createAsyncThunk(
     'auth/deleteAddress',
     async (data) => {
-        console.log(data, ";;;;;;;;;;;;;;;;;;;;;;");
+        console.log("deleteAddress");
         try {
             await firestore()
                 .collection('users')
@@ -259,7 +266,7 @@ export const deleteAddress = createAsyncThunk(
 export const updateAddress = createAsyncThunk(
     'auth/updateAddress',
     async (data) => {
-        console.log(data, "/////////////////////////////////");
+        console.log("updateAddress");
         try {
             await firestore()
                 .collection('users')
@@ -309,6 +316,7 @@ export const updateAddress = createAsyncThunk(
 export const addUserInfo = createAsyncThunk(
     'auth/addUserInfo',
     async (data) => {
+        console.log("addUserInfo");
         // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$", data);
 
         if (typeof data.imageURL === 'string') {
@@ -371,7 +379,7 @@ export const logOut = createAsyncThunk(
     'auth/logOut',
 
     async (data) => {
-        console.log(data, "dddddddddddddddddddddd");
+        console.log("logOut");
 
         try {
             await firebase.auth()
@@ -422,8 +430,8 @@ const authSlice = createSlice({
             state.user = action.payload
         })
         builder.addCase(getAddress.fulfilled, (state, action) => {
-
-            state.user = action.payload
+            console.log("builddddddddddddgetaddresssssssss", action.payload);
+            state.user = action.payload;
         })
         builder.addCase(logOut.fulfilled, (state, action) => {
 

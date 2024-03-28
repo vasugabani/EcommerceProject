@@ -111,27 +111,36 @@ import { View, Text, Button, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useStripe } from '@stripe/stripe-react-native';
 import { Screen } from 'react-native-screens';
+import { useDispatch } from 'react-redux';
+import { addOrderData } from '../../redux/slice/order.slice';
 
-export default function Payment() {
+export default function Payment({orderData}) {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
+  const [customerid, setcustomerid]=useState(null)
+  // console.log("stateeeeeeeeeeeeeeeeeeeeeee",customerid);
+
+  // console.log("88888888888888888888888888888",orderData);
+
+  const dispatch=useDispatch()
 
   const fetchPaymentSheetParams = async () => {
-    console.log("aaaaaaaaaaaaaaaaaaa");
+    // console.log("aaaaaaaaaaaaaaaaaaa");
 
-    let amt = 6000 * 100
+    let amt = orderData.total * 100
 
-    const response = await fetch('http://192.168.184.225:4242/payment-sheet', {
+    const response = await fetch('http://192.168.1.8:4242/payment-sheet', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({amount: amt})
+      body: JSON.stringify({ amount: amt })
     });
 
-    const { paymentIntent, ephemeralKey, customer} = await response.json();
+    const { paymentIntent, ephemeralKey, customer } = await response.json();
 
     console.log(paymentIntent, ephemeralKey, customer);
+    setcustomerid(customer)
 
     return {
       paymentIntent,
@@ -164,7 +173,7 @@ export default function Payment() {
         name: 'Jane Doe',
       }
     });
-    console.log("errrrrrrrrrrrrrrrrrrrrrr",error);
+    console.log("errrrrrrrrrrrrrrrrrrrrrr", error);
     if (!error) {
       setLoading(true);
     }
@@ -179,6 +188,7 @@ export default function Payment() {
       Alert.alert(`Error code: ${error.code}`, error.message);
     } else {
       Alert.alert('Success', 'Your order is confirmed!');
+      dispatch(addOrderData({...orderData,customerID:customerid}))
     }
   };
 
@@ -188,11 +198,14 @@ export default function Payment() {
 
   return (
     <Screen>
-      <Button
-        variant="primary"
-        title="Payment"
-        onPress={openPaymentSheet}
-      />
+      <View style={{width:100,alignSelf:'center'}}>
+        <Button
+        color={"black"}
+          variant="primary"
+          title="Payment"
+          onPress={openPaymentSheet}
+        />
+      </View>
     </Screen>
   );
 }

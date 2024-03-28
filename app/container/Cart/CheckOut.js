@@ -13,8 +13,10 @@ export default function CheckOut({ navigation }) {
 
     const [selectValue, setSelectedValue] = useState(null)
 
+    const authData = useSelector(state => state.auth)
+
     useEffect(() => {
-        dispatch(getAddress())
+        dispatch(getAddress(authData.user))
     }, [])
 
     const dispatch = useDispatch()
@@ -24,17 +26,17 @@ export default function CheckOut({ navigation }) {
     const pData = route.params?.pData
     // console.log(pData, "llllllllllllllllllllllll");
 
-    const authData = useSelector(state => state.auth)
-    console.log("okkkkkkkkkkkkkkkkkkkk", authData.user);
+    
+    // console.log("okkkkkkkkkkkkkkkkkkkk", authData.user);
 
     const uid = authData.user.uid
-    console.log(uid,"uuuuuuiiiiiiiiiiiddddddddd");
+    // console.log(uid,"uuuuuuiiiiiiiiiiiddddddddd");
 
     const oid = Math.floor(Math.random() * 1000000)
 
     const handleRadio = (data) => {
         // console.log(data, "radioooooooooooooooooooooo");
-        dispatch(addOrderData({ ...data, uid: uid, pData: pData, total, orderId: oid }))
+        // dispatch(addOrderData({ ...data, uid: uid, pData: pData, total, orderId: oid }))
         setSelectedValue(data);
     }
 
@@ -66,7 +68,7 @@ export default function CheckOut({ navigation }) {
                                         <RadioButton
                                             value={i}
                                             status={selectValue === i ? 'checked' : 'unchecked'}
-                                            onPress={() => handleRadio({ i, v })}
+                                            onPress={() => handleRadio({ v })}
                                             color='black'
                                         />
                                         <Text>Address {i + 1}</Text></View>
@@ -96,16 +98,16 @@ export default function CheckOut({ navigation }) {
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => navigation.navigate('Payment')} style={{
-                        borderRadius: 20,
-                        width: 100,
+                        // borderRadius: 20,
+                        // width: 100,
                         padding: 10,
-                        marginHorizontal: 10,
-                        backgroundColor: 'black',
+                        // marginHorizontal: 10,
+                        // backgroundColor: 'black',
                         marginTop: 15,
                         alignSelf: 'center',
                         marginBottom: 10
                     }}>
-                        <Payment />
+                        <Payment orderData={{address:selectValue,uid: uid, pData: pData, total, orderId: oid}}/>
                     </TouchableOpacity>
                 </ScrollView>
 

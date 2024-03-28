@@ -2,8 +2,10 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Feather from 'react-native-vector-icons/Feather';
 import { horizontalScale, moderateScale, verticalScale } from '../constant/Metrices';
+import { useSelector } from 'react-redux';
 // import { horizontalScale, moderateScale, verticalScale } from '../../constant/Metrices';
-export default function Order({ Quantity, imgurl, size, price, Product, plusQty, minusQty, removeQty }) {
+export default function Order({ Quantity, imgurl, size, price, Product, plusQty, minusQty, removeQty,onPress }) {
+    
     return (
         <View>
 
@@ -24,6 +26,10 @@ export default function Order({ Quantity, imgurl, size, price, Product, plusQty,
                         
                         <Text style={{ fontSize: moderateScale(15), marginTop: verticalScale(10), marginLeft: horizontalScale(10) }}>price:  <Text style={{ fontSize: moderateScale(16), color: "black", marginTop: verticalScale(50),  }}>{price}</Text></Text>
                     </View>
+                    <TouchableOpacity onPress={onPress} style={{position:'absolute',bottom:0,right:0,marginBottom:10}}>
+                        
+                    <Text style={{color:'red',textDecorationLine:'underline',textDecorationStyle:'double'}}>Add Review +</Text>
+                  </TouchableOpacity>
                 </View>
                 
 

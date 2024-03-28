@@ -63,6 +63,7 @@ export default function MyProfile({ navigation }) {
       <Profileinput
         name="My  reviews"
         titel="Reviews for 4 items"
+        // onPress={() => navigation.navigate('Review')}
       />
 
       <Profileinput
