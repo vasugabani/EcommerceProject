@@ -2,6 +2,7 @@ import { View, Text, StatusBar, ScrollView, StyleSheet, Image, TouchableOpacity,
 import React, { useEffect, useState } from 'react'
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AppButton from '../../component/Button/AppButton';
 import LikeCard from '../../component/Card/LikeCard';
 import { horizontalScale, moderateScale, verticalScale } from '../../constant/Metrices';
@@ -10,6 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProductData } from '../../redux/slice/product.slice';
 import { addToCart } from '../../redux/slice/cart.slice';
 import { addToFavourite } from '../../redux/slice/favourite.slice';
+import { getReview } from '../../redux/slice/review.slice';
+import { addUserInfo, getUsers } from '../../redux/slice/auth.slice';
+
 
 export default function ProductDetails({ navigation }) {
   const [data, setData] = useState([])
@@ -18,6 +22,13 @@ export default function ProductDetails({ navigation }) {
   const [active, setActive] = useState(false)
   const [modal, setmodal] = useState(false)
 
+  useEffect(() => {
+
+    dispatch(getProductData())
+    dispatch(getReview())
+    dispatch(getUsers())
+  }, [])
+
   const handleOpen = () => {
     setmodal(true)
   }
@@ -25,17 +36,18 @@ export default function ProductDetails({ navigation }) {
     setmodal(false)
   }
   const dispatch = useDispatch()
-  useEffect(() => {
-
-    dispatch(getProductData())
-  }, [])
 
   const reviewData = useSelector(state => state.review)
-  // console.log(reviewData.review, "rrrrrrrrrrrrrrrrrrrrrrr");
+  // console.log("rrrrrrrrrrrrrrrrrrrrrrr", reviewData.review);
 
   const productSel = useSelector(state => state.product)
 
+  const authData = useSelector(state => state.auth)
+  // console.log("rrrrrrrrrrrrrrrrrrrrrrr111111111111111111111", authData);
+
   const favouriteData = useSelector(state => state.favourite)
+
+
 
   const handleActive = (id) => {
     setActive(!active);
@@ -64,6 +76,33 @@ export default function ProductDetails({ navigation }) {
     dispatch(addToCart(id))
   }
 
+  const filterReview = reviewData.review.filter((v) => v.Productid === id)
+  // console.log("ffffffffffffffffffffffff", filterReview);
+
+  let totalRating = 0;
+  let totalUser = filterReview.length;
+
+  filterReview.forEach(review => {
+    totalRating += review.Rating;
+  });
+
+  let averageRating = totalUser > 0 ? totalRating / totalUser : 0;
+
+  const stars = [];
+  let remainingRating = averageRating;
+  for (let i = 0; i < 5; i++) {
+    if (remainingRating >= 1) {
+      stars.push({ type: 'star', color: 'gold' });
+      remainingRating -= 1;
+    } else if (remainingRating >= 0.5) {
+      stars.push({ type: 'star-half', color: 'gold' });
+      remainingRating -= 0.5;
+    } else {
+      stars.push({ type: 'star-border', color: 'gold' });
+    }
+  }
+
+
   return (
     <ScrollView style={style.cointener}>
       <StatusBar
@@ -74,7 +113,7 @@ export default function ProductDetails({ navigation }) {
 
         {
           filterData.map((v, i) => {
-
+                console.log(v,"uuuuuuuuuuuuuuuuuuu555555555555555555555555");
             return (
               <View key={i}>
                 <View style={style.imagebox}>
@@ -158,7 +197,7 @@ export default function ProductDetails({ navigation }) {
         <View><Text style={{ fontSize: moderateScale(20), color: 'black', marginTop: verticalScale(15), marginLeft: horizontalScale(20) }}>Support</Text></View>
 
       </View>
-          
+
       <View style={{ width: '100%', height: verticalScale(50), borderWidth: 0.5, flexDirection: 'row' }}>
         <View><Text style={{ fontSize: moderateScale(20), color: 'black', marginTop: verticalScale(15), marginLeft: horizontalScale(20) }}>Review</Text></View>
         <View style={{ marginLeft: 300, marginTop: 15 }}>
@@ -169,14 +208,77 @@ export default function ProductDetails({ navigation }) {
           transparent={true}
           visible={modal}
         >
-          <View style={{ width: '100%', marginTop: verticalScale(510), backgroundColor: 'white' }}>
-            <TouchableOpacity onPress={() => handleClose()} style={{ marginLeft: horizontalScale(150)}}>
+          <View style={{ width: '100%', marginTop: verticalScale(430), backgroundColor: 'white' }}>
+            <TouchableOpacity onPress={() => handleClose()} style={{ marginLeft: horizontalScale(150) }}>
               <MaterialCommunityIcons name='minus-thick' size={50} color={'black'} />
             </TouchableOpacity>
-            <ScrollView style={{ height: 180 }}>
+            <ScrollView style={{ height: 300, marginBottom: 25 }}>
+
+              <View style={{ marginTop: 20, }}>
+                <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                  {stars.map((star, index) => (
+                    <MaterialIcons
+                      key={index}
+                      name={star.type}
+                      color={star.color}
+                      size={35}
+                      style={{ marginLeft: 10 }}
+                    />
+                  ))}
+                </View>
+                <Text style={{ fontSize: 16, color: 'black', marginTop: 5, textAlign: 'center' }}>
+                  Average Rating: {averageRating.toFixed(1)}/5
+                </Text>
+              </View>
+
+
+
               {
-                reviewData.review.Productid === id ? <View style={{ marginBottom: 10 }}><Text style={{ color: 'black', marginHorizontal: 15 }}>Review : <Text style={{ color: 'black', fontWeight: 'bold', }}>{reviewData.review.Reviews}</Text></Text>
-                  <Text style={{ color: 'black', marginHorizontal: 15 }}>Rating : <Text style={{ color: 'black', fontWeight: 'bold', }}>{reviewData.review.Rating} star</Text></Text></View> : null
+                reviewData.review.map((v) => {
+                  // console.log("33333333333333333333332222222222222", v);
+
+                  return (
+                    v.Productid === id ?
+
+                      <View style={{ marginTop: 35, }}>
+                        <View style={{ marginBottom: 5 }}>
+                          <Text style={{ color: 'black', marginHorizontal: 15 }}>Review By
+                            {
+                              authData.allUser.map((v1) => {
+                                // console.log("vvvvvvvvvvvvvvv", v1);
+                                if (v1.uid === v.Userid) {
+                                  return (
+                                    <>
+                                    <Text style={{ color: 'black', fontWeight: 'bold', }}> {v1.name},
+                                    </Text></>
+                                  )
+                                }
+                              })
+                            }
+                          </Text></View>
+
+                        <View style={{ marginBottom: 5 }}>
+                          <Text style={{ color: 'black', marginHorizontal: 15 }}>Review :
+                            <Text style={{ color: 'black', fontWeight: 'bold', }}>{v.Reviews}
+                            </Text></Text></View>
+
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text style={{ color: 'black', marginLeft: 15 }}>Rating :</Text>
+                          <View style={{ flexDirection: 'row', marginTop: verticalScale(2) }}>
+                            {[...Array(v.Rating)].map((_, index) => (
+                              <MaterialIcons key={index} name="star" color='#FFBA49' size={16} />
+                            ))}
+                            {[...Array(5 - v.Rating)].map((_, index) => (
+                              <MaterialIcons key={index} name="star-border" color='#FFBA49' size={16} />
+                            ))}
+                            <Text style={{ color: 'grey' }}>({v.Rating})</Text>
+                          </View>
+                        </View>
+                      </View>
+
+                      : null
+                  )
+                })
               }
             </ScrollView>
           </View>

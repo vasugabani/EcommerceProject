@@ -8,6 +8,7 @@ import storage from '@react-native-firebase/storage';
 const initialState = {
     isLoading: false,
     user: null,
+    allUser: [],
     error: null
 }
 
@@ -15,17 +16,16 @@ export const signupEmailPass = createAsyncThunk(
     'auth/signupEmailPass',
     async (data) => {
         console.log("signupEmailPass");
-
+        console.log("ddddddddddddddd",data);
         await auth()
             .createUserWithEmailAndPassword(data.email, data.password)
-
             .then(async (userCredential) => {
                 await firestore()
                     .collection('users')
                     .doc(userCredential.user.uid)
                     .set({ name: data.name, email: data.email, emailVerified: false, createdAt: new Date().toString(), updatedAt: new Date().toString() })
                     .then((doc) => {
-                        console.log('User added!');
+                        console.log('User added!', doc);
 
                     });
 
@@ -106,13 +106,13 @@ export const loginEmailPass = createAsyncThunk(
 
     async (data) => {
         console.log("loginEmailPass");
-        // console.log("000000000000000", data);
+        console.log("000000000000000", data.email, data.password);
 
-
-        const user = await auth()
+        try {
+            const user = await auth()
             .signInWithEmailAndPassword(data.email, data.password)
             .then(async (user) => {
-                console.log('User account created & signed in!', user);
+                console.log('User account created & signed in! login:::::::::::', user);
 
                 if (user.user.emailVerified) {
                     console.log("your account is log in ");
@@ -122,10 +122,12 @@ export const loginEmailPass = createAsyncThunk(
                         .doc(user.user.uid)
                         .update({ emailVerified: true })
                         .then(() => {
-                            console.log('User updated!');
+                            console.log('User updated!',user.user.uid);
                         });
 
 
+                        //get 
+                    // console.log();
 
                     return user.user;
                 } else {
@@ -134,7 +136,6 @@ export const loginEmailPass = createAsyncThunk(
 
 
             })
-
             .catch(error => {
                 if (error.code === 'auth/email-already-in-use') {
                     console.log('That email address is already in use!');
@@ -152,8 +153,35 @@ export const loginEmailPass = createAsyncThunk(
             });
         console.log("qqqqqqqqqqqqqq", user);
         return user;
+        } catch (error) {
+            console.log(error.message);
+        }
+        
     }
 )
+
+export const getUsers = createAsyncThunk(
+    'auth/getUsers',
+    async () => {
+        try {
+            let usersData = [];
+            const querySnapshot = await firestore().collection('users').get();
+
+            querySnapshot.forEach(documentSnapshot => {
+                if (documentSnapshot.exists) {
+                    console.log('Get user => User data: ', documentSnapshot.data());
+                    usersData.push({...documentSnapshot.data(), uid: documentSnapshot.id});
+                }
+            });
+
+            console.log("get user => All users data: ", usersData);
+            return usersData;
+        } catch (error) {
+            console.error('Error getting users: ', error);
+            throw error;
+        }
+    }
+);
 
 export const getAddress = createAsyncThunk(
     'auth/getAddress',
@@ -175,7 +203,7 @@ export const getAddress = createAsyncThunk(
                 });
 
             console.log("vvvvvvvvvvvvvvvvvv", aData);
-            let fData = {...aData, uid: data.uid}
+            let fData = { ...aData, uid: data.uid }
             console.log("adddddddddddddddddddddressssssssss", fData);
             return fData;
         } catch (error) {
@@ -313,6 +341,35 @@ export const updateAddress = createAsyncThunk(
     }
 )
 
+export const getUserProfile = createAsyncThunk(
+    'auth/getUserProfile',
+    async(userid)=>{
+        // console.log("6666666666666666666666666666666",uid);
+        let data;
+        try{
+
+            await firestore()
+            .collection('users')
+            .doc(userid)
+            .get()
+            .then(documentSnapshot => {
+                console.log('getUserProfile user Exists : ',documentSnapshot);
+
+                if(documentSnapshot.exists){
+                    console.log('getUserProfile User data : ',documentSnapshot.data());
+                    data={...documentSnapshot.data(),uid:userid}
+                }
+                console.log("4444444444444444444444444",data);
+                
+            })
+            return data;
+        }catch(error){
+            console.log(error);
+        }
+
+    }
+)
+
 export const addUserInfo = createAsyncThunk(
     'auth/addUserInfo',
     async (data) => {
@@ -392,6 +449,31 @@ export const logOut = createAsyncThunk(
         }
     }
 )
+// export const getuserdata = createAsyncThunk(
+//     'auth/get',
+//     async (uid, { rejectWithValue }) => {
+//         try {
+//             const documentSnapshot = await firestore()
+//                 .collection('users')
+//                 .doc(uid)
+//                 .get();
+
+//             // Check if user document exists
+//             if (!documentSnapshot.exists) {
+//                 throw new Error('User not found');
+//             }
+
+//             // Extract user data
+//             const userData = documentSnapshot.data();
+
+//             console.log(userData, 'Retrieved user data');
+//             return userData;
+//         } catch (error) {
+//             console.error('Error fetching user data:', error);
+//             throw error;
+//         }
+//     }
+// );
 
 const authSlice = createSlice({
     name: 'auth',
@@ -406,7 +488,7 @@ const authSlice = createSlice({
         builder.addCase(signinGoogle.fulfilled, (state, action) => {
 
 
-            state.user = action.payload;
+            state.user = action.payload.user;
         })
         builder.addCase(signinFacebook.fulfilled, (state, action) => {
 
@@ -430,13 +512,31 @@ const authSlice = createSlice({
             state.user = action.payload
         })
         builder.addCase(getAddress.fulfilled, (state, action) => {
-            console.log("builddddddddddddgetaddresssssssss", action.payload);
+            // console.log("builddddddddddddgetaddresssssssss", action.payload);
             state.user = action.payload;
         })
         builder.addCase(logOut.fulfilled, (state, action) => {
 
             state.user = action.payload
         })
+        builder.addCase(getUsers.fulfilled, (state, action) => {
+            console.log(action.payload, "888888888888888888");
+            state.allUser=action.payload
+            // state.user=action.payload[0]
+
+            console.log(state, "get111111111111111111111111111");
+        })
+        builder.addCase(getUserProfile.fulfilled, (state, action) => {
+            console.log("99999999999999999999999",action.payload);
+            state.user = action.payload
+            
+        })
+        // builder.addCase(getuserdata.fulfilled, (state, action) => {
+   
+        //     state.user = action.payload
+            
+        // })
+
     }
 });
 

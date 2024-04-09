@@ -22,6 +22,7 @@ import CheckOut from '../container/Cart/CheckOut';
 import OrderDetails from '../container/Cart/OrderDetails';
 import SplashScreen from '../container/SplashScreen';
 import Review from '../container/Cart/Review';
+import MyReview from '../container/Cart/MyReview';
 
 // export default function StackNavigation({ navigation }) {
 
@@ -231,6 +232,21 @@ import Review from '../container/Cart/Review';
         />
 
 <Stack.Screen name='Review' component={Review}
+          options={{
+            headerTitleAlign: 'center',
+            headerBackVisible: false,
+            headerLeft: () => (
+              <CustomButton
+                icon='chevron-left'
+                onClick={() => {
+                  navigation.goBack();
+                }}
+              />
+            ),
+          }}
+        />
+
+<Stack.Screen name='MyReview' component={MyReview}
           options={{
             headerTitleAlign: 'center',
             headerBackVisible: false,

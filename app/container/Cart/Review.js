@@ -1,12 +1,16 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import StarRating from '../../component/StarRating'
 import { useRoute } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { addReview } from '../../redux/slice/review.slice'
+import { addReview, getReview } from '../../redux/slice/review.slice'
 
 
 export default function Review() {
+
+  useEffect(()=>{
+    dispatch(getReview())
+  },[])
 
   const dispatch = useDispatch()
 
@@ -16,7 +20,7 @@ export default function Review() {
   // console.log(rating,"rrrrrrrrrrrrrrrrrrrrrrrrrrr");
 
   const authData = useSelector(state=>state.auth)
-  // console.log(authData.user.uid);
+  console.log(authData.user.uid);
 
   const handleRate = (newRating) => {
     setRating(newRating)

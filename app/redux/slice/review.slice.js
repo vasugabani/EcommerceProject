@@ -7,17 +7,36 @@ const initialState = {
     error: null
 }
 
+export const getReview = createAsyncThunk(
+    'review/get',
+    async () => {
+        let review = []
+        await firestore()
+            .collection('review')
+            .get()
+            .then(querySnapshot => {
+                console.log('Total users: ', querySnapshot.size);
+
+                querySnapshot.forEach(documentSnapshot => {
+                    console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
+                    review.push(documentSnapshot.data())
+                    // review[documentSnapshot.id] = documentSnapshot.data(); // Store data with document ID as key
+                });
+            });
+        // console.log(review, "1111111111111111111111111111");
+        return review;
+    }
+)
 export const addReview = createAsyncThunk(
     'review',
     async (data) => {
-        console.log(data, "ddddddddddddddddd");
+        // console.log(data, "ddddddddddddddddd");
         await firestore()
             .collection('review')
             .add(data)
             .then(() => {
                 console.log('User added!');
             });
-
         return data;
     }
 )
@@ -29,7 +48,13 @@ const reviewSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(addReview.fulfilled, (state, action) => {
             // console.log(action.payload, "aaaaaaaaaaaaaaaaaaaaaaa");
+            state.review.push(action.payload)
+            // console.log(state, "aaaaaaaaaaaaaaaaaaaaaaaddddddddddddddddddddd");
+        })
+        builder.addCase(getReview.fulfilled, (state, action) => {
+            // console.log(action.payload, "2222222222222222222222222");
             state.review = action.payload
+            // console.log(state, "3333333333333333333333333333333333");
         })
     }
 })

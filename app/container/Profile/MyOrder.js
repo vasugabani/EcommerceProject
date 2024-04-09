@@ -16,7 +16,7 @@ export default function MyOrder({ navigation }) {
   // console.log(orderData, "lllllllllllllllllllllllll");
 
   const authData = useSelector(state => state.auth)
-  // console.log(authData,"aaaaaaaaaaaaaaaaaaaaaaaaaaa");
+  console.log(authData.user,"aaaaaaaaaaaaaaaaaaaaaaaaaaa");
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getOrderData({ id: authData.user.uid }))

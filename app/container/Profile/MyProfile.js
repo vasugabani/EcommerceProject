@@ -1,22 +1,30 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Profileinput from '../../component/Profileinput'
 import { verticalScale } from '../../constant/Metrices'
 import Address from '../Cart/Address'
 import { useDispatch, useSelector } from 'react-redux'
-import { logOut } from '../../redux/slice/auth.slice'
+import { getUserProfile, getuserdata, logOut } from '../../redux/slice/auth.slice'
 
 export default function MyProfile({ navigation }) {
   const authData = useSelector(state => state.auth)
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa",authData.user.uid);
 
   const dispatch=useDispatch()
 
+  useEffect(()=>{
+    // dispatch(getuserdata(authData.user.uid))
+    dispatch(getUserProfile(authData.user.uid))
+  },[])
+
   const handleLogOut = () => {
-    console.log("okkkkkkkkkkkkkkk");
+    // console.log("okkkkkkkkkkkkkkk");
 
     dispatch(logOut(authData.user.email))
       
   }
+
+
   return (
 
     <View style={{ marginTop: verticalScale(15) }}>
@@ -32,8 +40,8 @@ export default function MyProfile({ navigation }) {
           </View>
         </TouchableOpacity>
         <View style={{ padding: 20, marginLeft: 10 }}>
-          <Text style={{ fontSize: 22, color: 'black', fontWeight: '900' }}>Vasu Gabani</Text>
-          <Text style={{ fontSize: 15, marginTop: 2 }}>vasugabani@Gmail.com</Text>
+          <Text style={{ fontSize: 22, color: 'black', fontWeight: '900' }}>{authData.user.name}</Text>
+          <Text style={{ fontSize: 15, marginTop: 2 }}>{authData.user.email}</Text>
         </View>
       </View>
 
@@ -63,7 +71,7 @@ export default function MyProfile({ navigation }) {
       <Profileinput
         name="My  reviews"
         titel="Reviews for 4 items"
-        // onPress={() => navigation.navigate('Review')}
+        onPress={() => navigation.navigate('MyReview')}
       />
 
       <Profileinput
