@@ -9,7 +9,7 @@ import { horizontalScale, moderateScale, verticalScale } from '../../constant/Me
 import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductData } from '../../redux/slice/product.slice';
-import { addToCart } from '../../redux/slice/cart.slice';
+import { addCart, addToCart } from '../../redux/slice/cart.slice';
 import { addToFavourite } from '../../redux/slice/favourite.slice';
 import { getReview } from '../../redux/slice/review.slice';
 import { addUserInfo, getUsers } from '../../redux/slice/auth.slice';
@@ -43,7 +43,7 @@ export default function ProductDetails({ navigation }) {
   const productSel = useSelector(state => state.product)
 
   const authData = useSelector(state => state.auth)
-  // console.log("rrrrrrrrrrrrrrrrrrrrrrr111111111111111111111", authData);
+  // console.log("rrrrrrrrrrrrrrrrrrrrrrr111111111111111111111", authData.user.uid);
 
   const favouriteData = useSelector(state => state.favourite)
 
@@ -71,9 +71,10 @@ export default function ProductDetails({ navigation }) {
 
   const filterData = productSel.product.filter((v) => v.id == id)
 
-  const handleCart = (id) => {
-
-    dispatch(addToCart(id))
+  const handleCart = (data) => {
+    console.log(data,"dddddddddddddddddddddddddd");
+    // dispatch(addToCart(data.id))
+    dispatch(addCart({...data,uid:authData.user.uid}))
   }
 
   const filterReview = reviewData.review.filter((v) => v.Productid === id)
@@ -113,7 +114,7 @@ export default function ProductDetails({ navigation }) {
 
         {
           filterData.map((v, i) => {
-                console.log(v,"uuuuuuuuuuuuuuuuuuu555555555555555555555555");
+                // console.log(v,"uuuuuuuuuuuuuuuuuuu555555555555555555555555");
             return (
               <View key={i}>
                 <View style={style.imagebox}>
@@ -183,7 +184,7 @@ export default function ProductDetails({ navigation }) {
           titel="ADD TO CART"
           onPress={() => {
             filterData.map((v) => {
-              handleCart(v.id)
+              handleCart(v)
               navigation.navigate('Bag')
             })
           }}

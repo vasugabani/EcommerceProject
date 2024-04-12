@@ -20,7 +20,7 @@ export default function BagCard({ Quantity, imgurl, color, size, price, Product,
                         <Text style={{ fontSize: moderateScale(15), marginTop: verticalScale(10), marginLeft: horizontalScale(10) }}>Size:  <Text style={{ fontSize: moderateScale(16), color: 'black' }}>{size}</Text></Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity disabled={Quantity > 1 ? false : true} onPress={minusQty} style={{ width: horizontalScale(40), height: verticalScale(40), borderRadius: 100, backgroundColor: 'white', padding: 10, marginTop: verticalScale(10), marginLeft: 12, borderRadius: moderateScale(40), shadowOpacity: 0.10, shadowRadius: 30, elevation: 9, }}>
+                        <TouchableOpacity  onPress={minusQty} style={{ width: horizontalScale(40), height: verticalScale(40), borderRadius: 100, backgroundColor: 'white', padding: 10, marginTop: verticalScale(10), marginLeft: 12, borderRadius: moderateScale(40), shadowOpacity: 0.10, shadowRadius: 30, elevation: 9, }}>
                             <Feather name="minus" size={moderateScale(20)} color="gray" />
                         </TouchableOpacity>
                         <Text style={{ fontSize: moderateScale(20), color: 'black', marginTop: verticalScale(20), marginLeft: horizontalScale(15) }}>{Quantity}</Text>
@@ -42,6 +42,8 @@ export default function BagCard({ Quantity, imgurl, color, size, price, Product,
         </View>
     )
 }
+
+// disabled={Quantity > 1 ? false : true}
 const style = StyleSheet.create({
     bagbox: {
         width: "90%",

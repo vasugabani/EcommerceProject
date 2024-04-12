@@ -1,22 +1,28 @@
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import BagCard from '../../component/Card/BagCard'
 import Feather from 'react-native-vector-icons/Feather';
 import AppButton from '../../component/Button/AppButton';
 import { horizontalScale, moderateScale, verticalScale } from '../../constant/Metrices';
 import { useDispatch, useSelector } from 'react-redux';
-import { decrementCart, incrementCart, removeCart } from '../../redux/slice/cart.slice';
+import { addCart, decrementCart, getCart, incrementCart, removeCart } from '../../redux/slice/cart.slice';
 
 export default function MyBag({ navigation }) {
 
   const dispatch = useDispatch()
 
+  const auth=useSelector(state=>state.auth)
+  // console.log("1111111111111111111111111111111",auth.user.uid);
+
+  useEffect(()=>{
+    dispatch(getCart({uid:auth.user.uid}))
+  },[])
+
   const product = useSelector(state => state.product)
   const cart = useSelector(state => state.cart)
   // console.log(cart.cart,"::::::::::::::::::::::::::::::::");
 
-  // const auth=useSelector(state=>state.auth)
-  // console.log("1111111111111111111111111111111",auth.user.uid);
+
 
   const allData = cart.cart.map((c) => {
     const productObj = product.product.find((p) => p.id == c.id)
@@ -39,17 +45,18 @@ export default function MyBag({ navigation }) {
   }
 
   const handleIncrement = (data) => {
-    
-    dispatch(incrementCart(data))
+    // console.log(data,"iiiiiiiiiiiiiiiiiiiiiiiiiii");
+    dispatch(incrementCart({...data,uid:auth.user.uid}))
     
   }
 
   const handleDecrement = (data) => {
-    dispatch(decrementCart(data))
+    dispatch(decrementCart({...data,uid:auth.user.uid}))
   }
 
   const handleRemove = (data) => {
-    dispatch(removeCart(data))
+    console.log(data,"iiiiiiiiiiiiiiiiiiiiiiiiiii");
+    dispatch(removeCart({data,uid:auth.user.uid}))
   }
   return (
     <View>
@@ -66,8 +73,8 @@ export default function MyBag({ navigation }) {
                 price={v.price*v.qty}
                 Quantity={v.qty}
                 Product={v.title}
-                plusQty={()=>handleIncrement(v.id)}
-                minusQty={()=>handleDecrement(v.id)}
+                plusQty={()=>handleIncrement(v)}
+                minusQty={()=>handleDecrement(v)}
                 removeQty={()=>handleRemove(v.id)}
               />
             </View>
