@@ -1,9 +1,9 @@
 import { View, Text, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FavouriteCard from '../../component/Card/FavouriteCard'
 import { horizontalScale, moderateScale, verticalScale } from '../../constant/Metrices';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToFavourite } from '../../redux/slice/favourite.slice';
+import { addToFavourite, getFav, removeFav } from '../../redux/slice/favourite.slice';
 import { addToCart } from '../../redux/slice/cart.slice';
 
 export default function Favourite({ navigation }) {
@@ -12,7 +12,14 @@ export default function Favourite({ navigation }) {
 
   const favData = useSelector(state => state.favourite)
   
+  const authData = useSelector(state=>state.auth)
   const productData = useSelector(state => state.product)
+
+  const userId=authData.user.uid;
+
+  useEffect(()=>{
+    dispatch(getFav(userId))
+  },[])
 
   const favouriteData = favData.favourite.map((f) => {
     
@@ -20,9 +27,12 @@ export default function Favourite({ navigation }) {
     return { ...productObj }
     
   })
+  console.log(  "fffav dataaaaa",favouriteData);
+  
 
   const handleDelete = (id) => {
-    dispatch(addToFavourite(id))
+    console.log("handledelete   ",id);
+    dispatch(removeFav({id,uid:authData.user.uid}))
   }
 
   const handleCart = (id) => {

@@ -13,9 +13,9 @@ export default function MyBag({ navigation }) {
 
   const auth=useSelector(state=>state.auth)
   // console.log("1111111111111111111111111111111",auth.user.uid);
-
+const userid=auth.user.uid;
   useEffect(()=>{
-    dispatch(getCart({uid:auth.user.uid}))
+    dispatch(getCart(userid))
   },[])
 
   const product = useSelector(state => state.product)

@@ -41,13 +41,13 @@ const initialState = {
 export const getCart = createAsyncThunk(
     'cart/getCart',
 
-    async (data) => {
-        // console.log("okkkkkkkkkkkkkkkkk", data);
+    async (userid) => {
+        console.log("okkkkkkkkkkkkkkkkk", userid);
         let Cdata;
         try {
             await firestore()
                 .collection('cart')
-                .doc(data.uid)
+                .doc(userid)
                 .get()
                 .then(documentSnapshot => {
                     console.log('User exists: ', documentSnapshot.exists);

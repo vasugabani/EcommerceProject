@@ -10,7 +10,7 @@ import { useRoute } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductData } from '../../redux/slice/product.slice';
 import { addCart, addToCart } from '../../redux/slice/cart.slice';
-import { addToFavourite } from '../../redux/slice/favourite.slice';
+import { addToFav, addToFavourite, removeFav } from '../../redux/slice/favourite.slice';
 import { getReview } from '../../redux/slice/review.slice';
 import { addUserInfo, getUsers } from '../../redux/slice/auth.slice';
 
@@ -51,7 +51,17 @@ export default function ProductDetails({ navigation }) {
 
   const handleActive = (id) => {
     setActive(!active);
-    dispatch(addToFavourite(id))
+
+    const isFavorite = favouriteData.favourite.includes(id);
+
+    if (isFavorite) {
+      dispatch(removeFav({ id, uid: authData.user.uid }));
+    } else {
+      dispatch(addToFav({ id, uid: authData.user.uid }))
+    }
+    // console.log("handle activeeeeeeee",v);
+
+
   }
   const handlepress = () => {
     Setmodel(true)
@@ -72,9 +82,9 @@ export default function ProductDetails({ navigation }) {
   const filterData = productSel.product.filter((v) => v.id == id)
 
   const handleCart = (data) => {
-    console.log(data,"dddddddddddddddddddddddddd");
+    console.log(data, "dddddddddddddddddddddddddd");
     // dispatch(addToCart(data.id))
-    dispatch(addCart({...data,uid:authData.user.uid}))
+    dispatch(addCart({ ...data, uid: authData.user.uid }))
   }
 
   const filterReview = reviewData.review.filter((v) => v.Productid === id)
@@ -114,7 +124,7 @@ export default function ProductDetails({ navigation }) {
 
         {
           filterData.map((v, i) => {
-                // console.log(v,"uuuuuuuuuuuuuuuuuuu555555555555555555555555");
+            // console.log(v,"uuuuuuuuuuuuuuuuuuu555555555555555555555555");
             return (
               <View key={i}>
                 <View style={style.imagebox}>
@@ -250,8 +260,8 @@ export default function ProductDetails({ navigation }) {
                                 if (v1.uid === v.Userid) {
                                   return (
                                     <>
-                                    <Text style={{ color: 'black', fontWeight: 'bold', }}> {v1.name},
-                                    </Text></>
+                                      <Text style={{ color: 'black', fontWeight: 'bold', }}> {v1.name},
+                                      </Text></>
                                   )
                                 }
                               })
