@@ -16,6 +16,7 @@ export default function MyBag({ navigation }) {
 const userid=auth.user.uid;
   useEffect(()=>{
     dispatch(getCart(userid))
+    
   },[])
 
   const product = useSelector(state => state.product)

@@ -38,13 +38,13 @@ export default function BottomTab() {
           } else if (route.name === 'Shop') {
             iconName = 'cart-outline'
 
-          } else if (route.name === 'Bag') {
+          } else if (route.name === 'BagStack') {
             iconName = 'shopping-outline'
 
-          } else if (route.name === 'Favourite') {
+          } else if (route.name === 'FavouriteStack') {
             iconName = 'cards-heart-outline'
 
-          } else if (route.name === 'Profile') {
+          } else if (route.name === 'ProfileStack') {
             iconName = 'account-outline'
           }
           return <MaterialCommunityIcons name={iconName} color={color} size={size} />
@@ -53,15 +53,15 @@ export default function BottomTab() {
         tabBarInactiveTintColor: 'grey',
       })}
     >
-      <Tab.Screen name='Home' component={StackNavigation}
+      <Tab.Screen name='Home' component={HomeStack}
         options={{
           headerShown: false,
         }}
       />
-      <Tab.Screen name='Shop' component={ProductList} />
-      <Tab.Screen name='Bag' component={MyBag} options={{headerShown:false,}}/>
-      <Tab.Screen name='Favourite' component={Favourite} options={{headerShown:false,}}/>
-      <Tab.Screen name='Profile' component={MyProfile}  options={{headerShown:false}} />
+      <Tab.Screen name='Shop' component={ShopStack} />
+      <Tab.Screen name='BagStack' component={BagStack} options={{headerShown:false,}}/>
+      <Tab.Screen name='FavouriteStack' component={FavouriteStack} options={{headerShown:false,}}/>
+      <Tab.Screen name='ProfileStack' component={ProfileStack}  options={{headerShown:false}} />
     </Tab.Navigator>
 
     :

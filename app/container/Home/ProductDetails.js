@@ -195,7 +195,7 @@ export default function ProductDetails({ navigation }) {
           onPress={() => {
             filterData.map((v) => {
               handleCart(v)
-              navigation.navigate('Bag')
+              navigation.navigate('BagStack')
             })
           }}
         />

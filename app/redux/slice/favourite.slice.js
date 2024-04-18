@@ -62,7 +62,7 @@ export const addToFav = createAsyncThunk(
         const favDoc = await favRef.get();
         const favData = favDoc.data();
         // console.log("hhhheeeeeeeellllllooooooooooooo", favData);
-
+ 
         return favData;
     }
 )
