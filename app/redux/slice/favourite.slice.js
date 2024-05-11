@@ -49,7 +49,7 @@ export const addToFav = createAsyncThunk(
                 console.log('cart update !!!!!!!!!!');
             } else {
                 await favRef.set({
-                    fav: [data.id ]
+                    fav: [data.id]
                 })
                 console.log('fav add !!!!!!!!!!!!!!');
             }
@@ -62,15 +62,15 @@ export const addToFav = createAsyncThunk(
         const favDoc = await favRef.get();
         const favData = favDoc.data();
         // console.log("hhhheeeeeeeellllllooooooooooooo", favData);
- 
+
         return favData;
     }
 )
 
 export const removeFav = createAsyncThunk(
     'wishList/removeFav',
-    async(data)=>{
-        console.log("removee favvvvv    ",data);
+    async (data) => {
+        console.log("removee favvvvv    ", data);
 
         try {
             // console.log(data, "&&&&&&&&&&&&&&", uid);
@@ -106,12 +106,22 @@ export const removeFav = createAsyncThunk(
     }
 )
 
+const handleLoading = (state, action) => {
+    state.isLoading = true
+    state.error = null
+}
+
+const handleError = (state, action) => {
+    state.error = action.error.message
+    state.isLoading = false
+}
+
 const favouriteSlice = createSlice({
     name: "favourite",
     initialState,
     reducers: {
         // addToFavourite: (state, action) => {
-            
+
 
         //     const favIndex = state.favourite.findIndex((v) => v === action.payload)
 
@@ -123,19 +133,30 @@ const favouriteSlice = createSlice({
         //     }    
         // }
     },
-    extraReducers:(builder)=>{
+    extraReducers: (builder) => {
+        builder.addCase(getFav.pending, handleLoading)
         builder.addCase(getFav.fulfilled, (state, action) => {
             state.favourite = action.payload.fav
+            state.isLoading = false
+            state.error = null
         })
-        builder.addCase(addToFav.fulfilled,(state,action)=>{
+        builder.addCase(getFav.rejected, handleError)
 
-            state.favourite=action.payload.fav
-            
+        builder.addCase(addToFav.pending, handleLoading)
+        builder.addCase(addToFav.fulfilled, (state, action) => {
+            state.favourite = action.payload.fav
+            state.isLoading = false
+            state.error = null
         })
+        builder.addCase(addToFav.rejected, handleError)
+
+        builder.addCase(removeFav.pending, handleLoading)
         builder.addCase(removeFav.fulfilled, (state, action) => {
-    
-            state.favourite = action.payload; 
+            state.favourite = action.payload;
+            state.isLoading = false
+            state.error = null
         });
+        builder.addCase(removeFav.rejected, handleError)
     }
 })
 

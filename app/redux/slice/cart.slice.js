@@ -69,7 +69,7 @@ export const getCart = createAsyncThunk(
 export const addCart = createAsyncThunk(
     'cart/add',
     async (data) => {
-        // console.log(data, "ccccccccccccccccccccccccc");
+        console.log(data, "ccccccccccccccccccccccccc");
         try {
             const cartRef = await firestore().collection('cart').doc(data.uid);
             const cartDoc = await cartRef.get()
@@ -231,7 +231,15 @@ export const removeCart = createAsyncThunk(
         }
     }
 )
+const handleLoading = (state, action) => {
+    state.isLoading = true
+    state.error = null
+}
 
+const handleError = (state, action) => {
+    state.error = action.error.message
+    state.isLoading = false
+}
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -270,14 +278,21 @@ const cartSlice = createSlice({
 
     },
     extraReducers: (builder) => {
+        builder.addCase(getCart.pending,handleLoading)
         builder.addCase(getCart.fulfilled, (state, action) => {
             state.cart = action.payload.cart
+            state.isLoading = false
+            state.error = null
         })
+        builder.addCase(getCart.rejected,handleError)
+
+        builder.addCase(addCart.pending,handleLoading)
         builder.addCase(addCart.fulfilled, (state, action) => {
             // console.log(" actionnnnnnnnnn  payloadddddddddd", action.payload);
 
             state.cart = action.payload.cart
-
+            state.isLoading = false
+            state.error = null
             // const itemAvaible = state.cart.findIndex((v)=>v.id === action.payload)
             // console.log(itemAvaible,"0000000000000000000000000000");
 
@@ -287,17 +302,33 @@ const cartSlice = createSlice({
             //     state.cart[itemAvaible].qty++
             // }
         })
+        builder.addCase(addCart.rejected,handleError)
+
+        builder.addCase(incrementCart.pending,handleLoading)
         builder.addCase(incrementCart.fulfilled, (state, action) => {
             // console.log("increment actionnnnnnnnnn", action.payload);
             state.cart = action.payload.cart;
+            state.isLoading = false
+            state.error = null
             // console.log("increment stateeeeeeeeeee", state);
         });
+        builder.addCase(incrementCart.rejected,handleError)
+
+        builder.addCase(decrementCart.pending,handleLoading)
         builder.addCase(decrementCart.fulfilled, (state, action) => {
             state.cart = action.payload.cart;
+            state.isLoading = false
+            state.error = null
         });
+        builder.addCase(decrementCart.rejected,handleError)
+
+        builder.addCase(removeCart.pending,handleLoading)
         builder.addCase(removeCart.fulfilled, (state,action)=>{
             state.cart=action.payload
+            state.isLoading = false
+            state.error = null
         })
+        builder.addCase(removeCart.rejected,handleError)
     }
 });
 

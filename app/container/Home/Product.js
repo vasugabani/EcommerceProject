@@ -89,7 +89,7 @@ export default function Product({ navigation }) {
           {
             sortedArr.map((v, i) => (
               <View key={i}>
-                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails',{id:v.id})}>
+                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails',{id:v.id, title:v.title})}>
                   <Card
                     imgref={v.image}
                     title={v.title}
@@ -286,6 +286,7 @@ const style = StyleSheet.create({
   mainDiv: {
     flex: 1,
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    marginTop:60
   }
 })

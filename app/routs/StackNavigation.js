@@ -453,19 +453,19 @@ const ShopStack = ({ navigation }) => {
         }}
       />
       <Stack.Screen name='ProductDetails' component={ProductDetails}
-        options={{
-          headerTitleAlign: 'center',
-          headerBackVisible: false,
-          headerShown: false,
-          headerLeft: () => (
-            <CustomButton
-              icon='chevron-left'
-              onClick={() => {
-                navigation.goBack();
-              }}
-            />
-          ),
-        }}
+        // options={{
+        //   headerTitleAlign: 'center',
+        //   headerBackVisible: false,
+        //   headerShown: false,
+        //   // headerLeft: () => (
+        //   //   <CustomButton
+        //   //     icon='chevron-left'
+        //   //     onClick={() => {
+        //   //       navigation.goBack();
+        //   //     }}
+        //   //   />
+        //   // ),
+        // }}
       />
       <Stack.Screen name='Bag' component={MyBag}
         options={{

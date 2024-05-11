@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native'
 import React, { useEffect } from 'react'
 import BagCard from '../../component/Card/BagCard'
 import Feather from 'react-native-vector-icons/Feather';
@@ -30,6 +30,7 @@ const userid=auth.user.uid;
     
     return { ...productObj, qty: c.qty, }
   });
+console.log(allData,"jjjjjjjjjjjj888888888888888");
 
   const priceData = allData.map((p)=>{
     // console.log(p,"qqqqqqqqqqqqqqqqqqqqqqqqqqqq");
@@ -37,7 +38,7 @@ const userid=auth.user.uid;
 
     return {...cdata, price : p.price}
   })
-  // console.log(priceData,"jjjjjjjjjjjjjjjjjjjjjjj");
+  console.log(priceData,"jjjjjjjjjjjjjjjjjjjjjjj");
 
   const totalAmount = allData.reduce((acc, v, i) => acc + (v.price*v.qty) ,0)
 
@@ -65,6 +66,10 @@ const userid=auth.user.uid;
         <Text style={{ fontWeight: 'bold', fontSize: 32, marginTop: verticalScale(14), marginLeft: horizontalScale(20), color: 'black' }}>My Bag</Text>
 
         {
+          allData== ''? <View style={{flex:1,marginTop:20}}><Text style={style.empty}>Not any product in your bag</Text></View>:
+          cart.isLoading?
+          <ActivityIndicator size={'large'} color={'red'}/>:
+          cart.error?<Text>{cart.error.message}</Text>:
           allData.map((v, i) => (
             <View key={i}>
               <BagCard
@@ -110,3 +115,11 @@ const userid=auth.user.uid;
     </View>
   )
 }
+const style = StyleSheet.create({
+  empty:{
+    fontSize:18,
+    color:'grey',
+    textAlign:'center',
+    
+  }
+})

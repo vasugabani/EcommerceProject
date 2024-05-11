@@ -27,6 +27,10 @@ export default function ProductDetails({ navigation }) {
     dispatch(getProductData())
     dispatch(getReview())
     dispatch(getUsers())
+
+    navigation.setOptions({
+      title : route.params.title
+    })
   }, [])
 
   const handleOpen = () => {
@@ -173,14 +177,14 @@ export default function ProductDetails({ navigation }) {
 
                 <Text>{v.title}</Text>
 
-                <View style={{ flexDirection: 'row', marginTop: verticalScale(5) }}>
+                {/* <View style={{ flexDirection: 'row', marginTop: verticalScale(5) }}>
                   <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
                   <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
                   <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
                   <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
                   <Feather name="star" color='#FFBA49' size={moderateScale(16)} />
                   <Text>(10)</Text>
-                </View>
+                </View> */}
 
                 <Text style={{ fontSize: moderateScale(16), color: 'black', marginTop: verticalScale(5) }}>{v.description}</Text>
               </View>

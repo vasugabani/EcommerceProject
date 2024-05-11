@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect } from 'react'
 import Profileinput from '../../component/Profileinput'
 import { verticalScale } from '../../constant/Metrices'
@@ -18,9 +18,21 @@ export default function MyProfile({ navigation }) {
   },[])
 
   const handleLogOut = () => {
+    Alert.alert("LogOut","Are you sure want to logout ?",[
+      {
+        text:'cancel',
+        onPress : ()=>console.log('cancellllllllllllll')
+      },
+      {
+        text:"ok",
+        onPress:()=>{
+          dispatch(logOut(authData.user.email))
+        }
+      }
+    ])
     // console.log("okkkkkkkkkkkkkkk");
 
-    dispatch(logOut(authData.user.email))
+    // dispatch(logOut(authData.user.email))
       
   }
 

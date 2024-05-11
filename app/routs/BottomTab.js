@@ -56,12 +56,13 @@ export default function BottomTab() {
       <Tab.Screen name='Home' component={HomeStack}
         options={{
           headerShown: false,
+          tabBarLabel:''
         }}
       />
-      <Tab.Screen name='Shop' component={ShopStack} />
-      <Tab.Screen name='BagStack' component={BagStack} options={{headerShown:false,}}/>
-      <Tab.Screen name='FavouriteStack' component={FavouriteStack} options={{headerShown:false,}}/>
-      <Tab.Screen name='ProfileStack' component={ProfileStack}  options={{headerShown:false}} />
+      <Tab.Screen name='Shop' component={ShopStack} options={{headerShown:false,tabBarLabel:''}}/>
+      <Tab.Screen name='BagStack' component={BagStack} options={{headerShown:false,tabBarLabel:''}}/>
+      <Tab.Screen name='FavouriteStack' component={FavouriteStack} options={{headerShown:false,tabBarLabel:''}}/>
+      <Tab.Screen name='ProfileStack' component={ProfileStack}  options={{headerShown:false,tabBarLabel:''}} />
     </Tab.Navigator>
 
     :

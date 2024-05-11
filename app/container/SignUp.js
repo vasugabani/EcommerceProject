@@ -1,17 +1,24 @@
 
-import { View, Text, StyleSheet, StatusBar, TextInput, Button, Pressable, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, TextInput, Button, Pressable, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 // import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
-import { signinFacebook, signinGoogle, signupEmailPass } from '../redux/slice/auth.slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { errorReset, signinFacebook, signinGoogle, signupEmailPass } from '../redux/slice/auth.slice';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 export default function SignUp({ navigation }) {
+
+ 
+
+  const authData = useSelector(state => state.auth)
+  console.log(authData.message, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
   GoogleSignin.configure({
     webClientId: '442714432717-q49m9gn1juiup0p95nvcl12l7h23bjrj.apps.googleusercontent.com',
   })
@@ -33,62 +40,94 @@ export default function SignUp({ navigation }) {
     onSubmit: (values, { resetForm }) => {
       console.log(values);
 
-      dispatch(signupEmailPass(values));
+      dispatch(signupEmailPass(values))
       resetForm();
+
     },
   });
+
+  const alertBox = () => {
+      Alert.alert('Error', 'Email already in use', [
+        {
+          text: 'OK',
+          onPress: () => {
+            dispatch(errorReset());
+            console.log('user already exists');
+          }
+        }
+      ]);
+  }
+
+  const emailAlert = () => {
+    
+    Alert.alert('Email', 'SignUp succesfull,please check your email to verify', [
+      {
+        text: 'OK',
+        onPress: () => {
+          dispatch(errorReset());
+          console.log('user verify');
+          navigation.navigate('Login')
+        }
+      }
+    ]);
+}
 
   const { handleChange, handleBlur, handleSubmit, errors, touched, values } = formik
 
   return (
-    <View style={style.container}>
-      <StatusBar
-        animated={true}
-        backgroundColor="#f5f5f5"
-        barStyle="dark-content"
+    <>
+      {
+        authData.error !== null ? alertBox() : authData.message ? emailAlert() :
+          <View style={style.container}>
+            <StatusBar
+              animated={true}
+              backgroundColor="#f5f5f5"
+              barStyle="dark-content"
 
-      />
-      {/* <MaterialIcons style={style.icon} name="keyboard-arrow-left" color={'black'} size={20} /> */}
-      <Text style={style.text}>Sign up</Text>
+            />
+            {/* <MaterialIcons style={style.icon} name="keyboard-arrow-left" color={'black'} size={20} /> */}
+            <Text style={style.text}>Sign up</Text>
 
-      <TextInput
-        style={style.input}
-        name='name'
-        placeholder='Name'
-        placeholderTextColor="grey"
-        onChangeText={handleChange('name')}
-        onBlur={handleBlur('name')}
-        value={values.name}
-      />
-      {touched.name && errors.name ? <Text style={style.error}>{errors.name}</Text> : null}
 
-      <TextInput
-        style={style.input1}
-        name='email'
-        placeholder='Email'
-        placeholderTextColor="grey"
-        onChangeText={handleChange('email')}
-        onBlur={handleBlur('email')}
-        value={values.email}
-      />
-      {touched.email && errors.email ? <Text style={style.error}>{errors.email}</Text> : null}
 
-      <TextInput
-        style={style.inputtext}
-        name='password'
-        placeholder='Password'
-        value={values.password}
-        placeholderTextColor="grey"
-        onChangeText={handleChange('password')}
-        onBlur={handleBlur('password')}
+            <TextInput
+              style={style.input}
+              name='name'
+              placeholder='Name'
+              placeholderTextColor="grey"
+              onChangeText={handleChange('name')}
+              onBlur={handleBlur('name')}
+              value={values.name}
+            />
+            {touched.name && errors.name ? <Text style={style.error}>{errors.name}</Text> : null}
 
-      />
-      {touched.password && errors.password ? <Text style={style.error}>{errors.password}</Text> : null}
+            <TextInput
+              style={style.input1}
+              name='email'
+              placeholder='Email'
+              placeholderTextColor="grey"
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              value={values.email}
+            />
+            {touched.email && errors.email ? <Text style={style.error}>{errors.email}</Text> : null}
 
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={{ color: 'black', marginLeft: 170, marginTop: 8 }}>Alreay have an account? </Text>
-      </TouchableOpacity>
-      {/* <View style = {style.buttontxt}>
+            <TextInput
+              style={style.inputtext}
+              name='password'
+              placeholder='Password'
+              value={values.password}
+              placeholderTextColor="grey"
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+
+            />
+            {touched.password && errors.password ? <Text style={style.error}>{errors.password}</Text> : null}
+
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+              <Text style={{ color: 'black', marginLeft: 170, marginTop: 8 }}>Alreay have an account? </Text>
+            </TouchableOpacity>
+            {/* <View style = {style.buttontxt}>
             <Button
                 title='Sign up'
                 color  = 'red'
@@ -96,27 +135,31 @@ export default function SignUp({ navigation }) {
             />
             </View> */}
 
-      <TouchableOpacity style={style.buttontxt} onPress={handleSubmit}>
-        <Text style={{ color: 'white' }}>SIGN UP</Text>
-      </TouchableOpacity>
-      <View style={style.parent}>
-        <Text style={style.textStyle}>Or sign up with social account</Text>
-      </View>
+            <TouchableOpacity style={style.buttontxt} onPress={handleSubmit}>
+              <Text style={{ color: 'white' }}>SIGN UP</Text>
+            </TouchableOpacity>
+            <View style={style.parent}>
+              <Text style={style.textStyle}>Or sign up with social account</Text>
+            </View>
 
-      <View style={style.btnparent}>
-        <Pressable
-          style={style.btnstyle}
-          onPress={() => dispatch(signinGoogle())}>
-        </Pressable>
-        <Pressable
-          style={style.btn}
-          onPress={() => dispatch(signinFacebook())}>
-          <MaterialIcons name="facebook" color={'darkblue'} size={45} marginLeft={2} />
-        </Pressable>
-      </View>
-    </View>
+            <View style={style.btnparent}>
+              <Pressable
+                style={style.btnstyle}
+                onPress={() => dispatch(signinGoogle())}>
+              </Pressable>
+              <Pressable
+                style={style.btn}
+                onPress={() => dispatch(signinFacebook())}>
+                <MaterialIcons name="facebook" color={'darkblue'} size={45} marginLeft={2} />
+              </Pressable>
+            </View>
+          </View>
+      }
+
+    </>
   )
 }
+
 const style = StyleSheet.create({
   container: {
     // height : 'auto',
@@ -210,3 +253,4 @@ const style = StyleSheet.create({
     color: 'red'
   }
 })
+

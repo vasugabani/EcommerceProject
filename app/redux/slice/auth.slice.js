@@ -4,46 +4,56 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import firestore, { firebase } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import { Alert } from "react-native";
+import { useSelector } from "react-redux";
 
 const initialState = {
     isLoading: false,
     user: null,
     allUser: [],
-    error: null
+    message:'',
+    error: null,
+    loginError:null
 }
+
 
 export const signupEmailPass = createAsyncThunk(
     'auth/signupEmailPass',
-    async (data) => {
+    async (data, { rejectWithValue }) => {
         console.log("signupEmailPass");
-        console.log("ddddddddddddddd",data);
-        await auth()
-            .createUserWithEmailAndPassword(data.email, data.password)
-            .then(async (userCredential) => {
-                await firestore()
-                    .collection('users')
-                    .doc(userCredential.user.uid)
-                    .set({ name: data.name, email: data.email, emailVerified: false, createdAt: new Date().toString(), updatedAt: new Date().toString() })
-                    .then((doc) => {
-                        console.log('User added!', doc);
+        console.log("ddddddddddddddd", data);
+        try {
+            await auth()
+                .createUserWithEmailAndPassword(data.email, data.password)
+                .then(async (userCredential) => {
+                    await firestore()
+                        .collection('users')
+                        .doc(userCredential.user.uid)
+                        .set({ name: data.name, email: data.email, emailVerified: false, createdAt: new Date().toString(), updatedAt: new Date().toString() })
+                        .then((doc) => {
+                            console.log('User added!', doc);
 
-                    });
+                        });
 
-                console.log("return dataaaaaaaaaaa", data);
-                console.log('User account created & signed in!', userCredential);
-                await userCredential.user.sendEmailVerification();
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                }
+                    await userCredential.user.sendEmailVerification()
+   
+                })
+                return {message:'SignUp succesfull,please check your email for verify'}
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
 
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                }
+                return rejectWithValue({ message: 'email already use' })
+                // console.log('That email address is already in use!');
+            }
 
-                console.error(error);
-            });
+            if (error.code === 'auth/invalid-email') {
+                return rejectWithValue({ message: 'invaild email' })
+            }
+
+            return rejectWithValue({ message: error.message })
+
+
+        };
 
     }
 )
@@ -107,56 +117,55 @@ export const loginEmailPass = createAsyncThunk(
     async (data) => {
         console.log("loginEmailPass");
         console.log("000000000000000", data.email, data.password);
-
+let userData;
         try {
-            const user = await auth()
-            .signInWithEmailAndPassword(data.email, data.password)
-            .then(async (user) => {
-                console.log('User account created & signed in! login:::::::::::', user);
+    
+            await auth()
+                .signInWithEmailAndPassword(data.email, data.password)
+                .then(async (user) => {
+                    console.log('User account created & signed in! login:::::::::::', user);
 
-                if (user.user.emailVerified) {
-                    console.log("your account is log in ");
+                    if (user.user.emailVerified) {
+                        console.log("your account is log in ");
 
-                    await firestore()
-                        .collection('users')
-                        .doc(user.user.uid)
-                        .update({ emailVerified: true })
-                        .then(() => {
-                            console.log('User updated!',user.user.uid);
-                        });
+                        await firestore()
+                            .collection('users')
+                            .doc(user.user.uid)
+                            .update({ emailVerified: true })
+                            .then(() => {
+                                console.log('User updated!', user.user.uid);
+                            });
 
-
-                        //get 
-                    // console.log();
-
-                    return user.user;
-                } else {
-                    console.log("please verify your email");
-                }
+                            userData=user.user
+                        return userData;
+                    } else {
+                        console.log("please verifyyyyyyyyyyyy");
+                        userData= {message:"please verify your email"}
+                    }
 
 
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                }
+                })
+                .catch(error => {
+                    if (error.code === 'auth/email-already-in-use') {
+                        console.log('That email address is already in use!');
+                    }
 
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                }
+                    if (error.code === 'auth/invalid-email') {
+                        console.log('That email address is invalid!');
+                    }
 
-                if (error.code === 'auth/invalid-credential') {
-                    console.log("invalid email or password");
-                }
+                    if (error.code === 'auth/invalid-credential') {
+                        console.log("invalid email or password");
+                    }
 
-                console.error(error);
-            });
-        console.log("qqqqqqqqqqqqqq", user);
-        return user;
+                    console.error(error,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                });
+            // console.log("qqqqqqqqqqqqqq", user);
+            
         } catch (error) {
             console.log(error.message);
         }
-        
+        return userData;
     }
 )
 
@@ -170,7 +179,7 @@ export const getUsers = createAsyncThunk(
             querySnapshot.forEach(documentSnapshot => {
                 if (documentSnapshot.exists) {
                     console.log('Get user => User data: ', documentSnapshot.data());
-                    usersData.push({...documentSnapshot.data(), uid: documentSnapshot.id});
+                    usersData.push({ ...documentSnapshot.data(), uid: documentSnapshot.id });
                 }
             });
 
@@ -343,27 +352,27 @@ export const updateAddress = createAsyncThunk(
 
 export const getUserProfile = createAsyncThunk(
     'auth/getUserProfile',
-    async(userid)=>{
+    async (userid) => {
         // console.log("6666666666666666666666666666666",uid);
         let data;
-        try{
+        try {
 
             await firestore()
-            .collection('users')
-            .doc(userid)
-            .get()
-            .then(documentSnapshot => {
-                console.log('getUserProfile user Exists : ',documentSnapshot);
+                .collection('users')
+                .doc(userid)
+                .get()
+                .then(documentSnapshot => {
+                    console.log('getUserProfile user Exists : ', documentSnapshot);
 
-                if(documentSnapshot.exists){
-                    console.log('getUserProfile User data : ',documentSnapshot.data());
-                    data={...documentSnapshot.data(),uid:userid}
-                }
-                console.log("4444444444444444444444444",data);
-                
-            })
+                    if (documentSnapshot.exists) {
+                        console.log('getUserProfile User data : ', documentSnapshot.data());
+                        data = { ...documentSnapshot.data(), uid: userid }
+                    }
+                    console.log("4444444444444444444444444", data);
+
+                })
             return data;
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
 
@@ -475,16 +484,52 @@ export const logOut = createAsyncThunk(
 //     }
 // );
 
+const handleLoading = (state, action) => {
+    state.isLoading = true
+    state.error = null
+}
+
+const handleError = (state, action) => {
+    console.log("aaaaaaaaaaaaaaaaaaaaa", action.payload.message);
+    state.error = action.payload.message
+    state.isLoading = false
+}
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        errorReset: (state, action) => {
+            state.isLoading = true
+            state.error = null
+            state.message=''
+            state.loginError=null
+        },
+    },
     extraReducers: (builder) => {
+        builder.addCase(loginEmailPass.pending,handleLoading)
         builder.addCase(loginEmailPass.fulfilled, (state, action) => {
             console.log(action.payload, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-            state.user = action.payload;
+            if(action.payload.message){
+                state.loginError=action.payload.message
+            }else{
+                state.user = action.payload;
+            }
+            state.isLoading=false
+            
         })
+        builder.addCase(loginEmailPass.rejected,handleError)
+
+        builder
+            .addCase(signupEmailPass.pending, handleLoading)
+            .addCase(signupEmailPass.fulfilled, (state, action) => {
+                
+                state.message=action.payload 
+                state.isLoading=false   
+            })
+            .addCase(signupEmailPass.rejected, handleError)
+
         builder.addCase(signinGoogle.fulfilled, (state, action) => {
 
 
@@ -520,24 +565,24 @@ const authSlice = createSlice({
             state.user = action.payload
         })
         builder.addCase(getUsers.fulfilled, (state, action) => {
-            console.log(action.payload, "888888888888888888");
-            state.allUser=action.payload
+            // console.log(action.payload, "888888888888888888");
+            state.allUser = action.payload
             // state.user=action.payload[0]
 
-            console.log(state, "get111111111111111111111111111");
+            // console.log(state, "get111111111111111111111111111");
         })
         builder.addCase(getUserProfile.fulfilled, (state, action) => {
-            console.log("99999999999999999999999",action.payload);
+            // console.log("99999999999999999999999", action.payload);
             state.user = action.payload
-            
+
         })
         // builder.addCase(getuserdata.fulfilled, (state, action) => {
-   
+
         //     state.user = action.payload
-            
+
         // })
 
     }
 });
-
+export const {errorReset} = authSlice.actions
 export default authSlice.reducer;

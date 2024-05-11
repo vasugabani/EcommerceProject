@@ -1,16 +1,19 @@
-import { View, Text, StyleSheet, StatusBar, TextInput, Button, Pressable, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, TextInput, Button, Pressable, Image, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 // import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
-import { loginEmailPass } from '../redux/slice/auth.slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { errorReset, loginEmailPass } from '../redux/slice/auth.slice';
 
 export default function Login({ navigation }) {
 
   const dispatch = useDispatch()
+
+  const authData = useSelector(state=>state.auth)
+  console.log(authData.loginError,"eeeeeeeeeeeeeeeeeeeeeeeeee");
 
   const loginSchema = yup.object({
     email: yup.string().email().required(),
@@ -30,9 +33,27 @@ export default function Login({ navigation }) {
     },
   });
 
+  const emailAlert = () => {
+    
+    Alert.alert('Login Failed', 'your email is not verify', [
+      {
+        text: 'OK',
+        onPress: () => {
+          dispatch(errorReset());
+          console.log('user verify');
+        }
+      }
+    ]);
+}
+
   const { handleChange, handleBlur, handleSubmit, errors, touched, values } = formik
 
   return (
+  
+    <>
+    {
+      authData.loginError !== null ? emailAlert() :
+    
     <View style={style.container}>
       <StatusBar
         animated={true}
@@ -92,6 +113,8 @@ export default function Login({ navigation }) {
         </Pressable>
       </View>
     </View>
+    }
+    </>
   )
 }
 const style = StyleSheet.create({
